@@ -1,7 +1,8 @@
 # Agentic File Explorer
 
-File explorer that uses an [Agent](https://docs.langchain.com/oss/python/langchain/agents#example-of-react-loop) to perform tasks such as file reading, writing, and summarization.
-Check out the [Langchain Docs](https://docs.langchain.com/) to understand the tools used through out the project.
+File explorer that uses an [Agent](https://docs.langchain.com/oss/python/langchain/agents#example-of-react-loop) to perform tasks such as file reading, writing, and summarization.  
+Check out the [Langchain Docs](https://docs.langchain.com/) to understand the tools used through out the project.  
+Check out the [Gradio Docs](https://www.gradio.app/docs) to familiarise yourself with Gradio to understand the tools used for the UI.
 
 ## Getting Started
 
