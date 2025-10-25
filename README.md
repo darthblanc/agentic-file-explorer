@@ -55,6 +55,24 @@ uv run main.py --model llama3.1 --verbose --username me --temperature 0.4 # chan
 - qwen3:8b has the best performance of the three, in terms of experimentation so far.
 - Check out some other [integration packages](https://docs.langchain.com/oss/python/integrations/providers/overview).
 
+## User Interface (UI)
+
+#### Run the UI
+
+```
+uv run ui.py
+```
+
+#### Run the UI (with reload)
+
+```
+gradio ui.py
+```
+
+#### Have a look at the Agentic File Explorer UI
+
+![Agentic File Explorer UI Image](images/agentic_file_explorer_ui.png)
+
 ## Unit Testing
 
 ```
