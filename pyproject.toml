@@ -1,5 +1,5 @@
 [project]
-name = "Agentic File Explorer"
+name = "agentic-file-explorer"
 version = "0.1.0"
 description = "File explorer that uses Agentic Frameworks to perform tasks such as file reading, writing, and summarization."
 readme = "README.md"
