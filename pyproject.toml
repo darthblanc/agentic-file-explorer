@@ -5,6 +5,7 @@ description = "File explorer that uses Agentic Frameworks to perform tasks such 
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "gradio>=5.49.1",
     "langchain>=1.0.2",
     "langchain-ollama>=1.0.0",
     "langchain-openai>=1.0.1",
