@@ -67,11 +67,20 @@ def get_directory(directory: str) -> str:
         return f"Listed: {size_string} from directory ({directory})"
     except Exception as e:
         return f"Error encountered while reading from directory ({directory}): {e}"
+    
+@tool(description="Create a specified directory.")
+def create_directory(directory: str) -> str:
+    try:
+        working_path = construct_directory_path(directory)
+        return f"Created directory: {working_path}"
+    except Exception as e:
+        return f"{e}"
 
 tools = [
     read,
     write,
     append,
     # clear,
-    get_directory
+    get_directory,
+    create_directory
 ]
