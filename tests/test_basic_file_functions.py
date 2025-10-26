@@ -4,7 +4,8 @@ DATA_DIR = os.environ["DATA_DIR"]
 
 import shutil
 import unittest
-from basic_file_functions import read, write, append, clear, get_directory  # adjust if needed
+from basic_file_functions import read, write, append, clear, get_directory, create_directory  # adjust if needed
+from pathlib import Path
 
 class TestFileTools(unittest.TestCase):
     def setUp(self):
@@ -46,6 +47,11 @@ class TestFileTools(unittest.TestCase):
         open(os.path.join(self.sub_dir, "b.txt"), "w").close()
         message = get_directory.invoke({"directory": "subdir"})
         self.assertEqual(message, "Listed: 2 items [b.txt, a.txt] from directory (subdir)")
+
+    def test_cd(self):
+        """Test creating directories using LangChain tools."""
+        message = create_directory.invoke({"directory": "sub_subdir"})
+        self.assertEqual(message, f"Created directory: {DATA_DIR}/sub_subdir")    
 
 
 if __name__ == "__main__":
