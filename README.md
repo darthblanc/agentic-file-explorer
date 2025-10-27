@@ -52,7 +52,7 @@ uv run main.py --model llama3.1 --verbose --username me --temperature 0.4 # chan
 
 #### Tools
 
-| Flag                   | Description                                                                                | Supports       |
+| Tool                   | Description                                                                                | Supports       |
 | ---------------------- | ------------------------------------------------------------------------------------------ | -------------- |
 | Read                   | Read the content of a specified file.                                                      | txt, csv files |
 | Write                  | Write content to a specified file (overrides previous content too)                         | txt, csv files |
