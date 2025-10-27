@@ -11,6 +11,16 @@ def read(path: str) -> str:
             return fd.read()
     except Exception as e:
         return f"Error encountered while reading from file ({path}): {e}"
+    
+@tool(description="Read the contents of a file specified by a path as a list of lines.")
+def read_lines(path: str) -> str:
+    working_path = construct_file_path(path)
+
+    try:
+        with open(working_path, "r") as fd:
+            return f"{fd.readlines()}"
+    except Exception as e:
+        return f"Error encountered while reading from file ({path}): {e}"
 
 @tool(description="Write new content to a file specified by a path. This tool will overwrite the previous content of the file.")
 def write(path: str, content: str) -> str:
@@ -23,13 +33,13 @@ def write(path: str, content: str) -> str:
     except Exception as e:
         return f"Error encountered while writing to file ({path}): {e}"
 
-@tool(description="Write new content to a file specified by a path. This tool will append the new content to the previous content of the file.")
+@tool(description="Write new content to a file specified by a path. This tool will append the new content to a new line after the previous content of the file.")
 def append(path: str, content: str) -> str:
     working_path = construct_file_path(path)
 
     try:
         with open(working_path, "a") as fd:
-            fd.write(content)
+            fd.write(f"\n{content}")
             return f"Wrote: content to ({path})"
     except Exception as e:
         return f"Error encountered while writing to file ({path}): {e}"
@@ -76,7 +86,7 @@ def create_directory(directory: str) -> str:
     except Exception as e:
         return f"{e}"
 
-tools = [
+basic_tools = [
     read,
     write,
     append,
