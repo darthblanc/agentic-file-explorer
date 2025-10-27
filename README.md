@@ -69,6 +69,7 @@ uv run main.py --model llama3.1 --verbose --username me --temperature 0.4 # chan
 - qwen3:8b has the best performance of the three, in terms of experimentation so far.
 - Check out some other [integration packages](https://docs.langchain.com/oss/python/integrations/providers/overview).
 - Be explicit when telling the agent to search. Try key words like "deep" vs "shallow" when trying to do a deep search (so the simple list directory content is not used). Or explicitly state the strategy (incase you are trying to do a BFS over DFS or vice versa).
+- BFS and DFS strategies also support approximate searches as well as exact searches for file and directory names.
 
 ## User Interface (UI)
 
