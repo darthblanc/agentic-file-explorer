@@ -50,11 +50,25 @@ uv run main.py --temperature 0.4 # change the temperature of the model
 uv run main.py --model llama3.1 --verbose --username me --temperature 0.4 # change everything from the defaults
 ```
 
+#### Tools
+
+| Flag                   | Description                                                                                | Supports       |
+| ---------------------- | ------------------------------------------------------------------------------------------ | -------------- |
+| Read                   | Read the content of a specified file.                                                      | txt, csv files |
+| Write                  | Write content to a specified file (overrides previous content too)                         | txt, csv files |
+| Append                 | Append content to a new line in a specified file                                           | txt, csv files |
+| Clear                  | Clear the content of a specified file (can be enabled manually in basic_file_functions.py) | txt, csv files |
+| List Directory Content | Get the immediate files and sub directories of a specified directory                       |                |
+| Create Directory       | Create a specified directory                                                               |                |
+| BFS for File System    | BFS strategy for searching directories                                                     | File search    |
+| DFS for File System    | DFS strategy for searching directories                                                     | File search    |
+
 #### Notes
 
 - Some supported LLMs are qwen3:8b, llama3.1, phi3.5 from [Ollama](https://ollama.com/library)
 - qwen3:8b has the best performance of the three, in terms of experimentation so far.
 - Check out some other [integration packages](https://docs.langchain.com/oss/python/integrations/providers/overview).
+- Be explicit when telling the agent to search. Try key words like "deep" vs "shallow" when trying to do a deep search (so the simple list directory content is not used). Or explicitly state the strategy (incase you are trying to do a BFS over DFS or vice versa).
 
 ## User Interface (UI)
 
