@@ -1,8 +1,7 @@
 from pathlib import Path
 import os
 
-# DATA_DIR = Path(os.environ["DATA_DIR"])
-DATA_DIR = Path("data")
+DATA_DIR = Path(os.environ["DATA_DIR"])
 
 def construct_file_path(path: str):
    """Create a Path object for a file.\n
