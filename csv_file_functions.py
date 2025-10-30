@@ -22,7 +22,7 @@ def read_csv(path: str) -> str:
                     rv.append(sub_dict)
     except Exception as e:
         return f"Error encountered while reading from file ({path}): {e}"
-    return rv
+    return f"{rv}"
 
 @tool(description="""Write new content to a csv file specified by a path. Content should be formatted similar to [{"col_a": "val_a"}, {"col_b": "val_b"}] where "col_a" and "col_b" are column names and in the column_names parameter. This tool will overwrite the previous content of the csv file.""")
 def write_to_csv(path: str, data: List[Dict[str, str]], column_names: List[str]) -> str:
