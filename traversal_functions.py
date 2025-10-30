@@ -17,7 +17,7 @@ def breadth_first_search(source_directory: str, target: str, approximate: str) -
     if targeted_search:
         compare(target, source_directory, approximate_search, results)
         if not approximate_search and results:
-            return f"Target: {target} was found"
+            return f"Target: {target} was found. Path: {source}/{target}"
 
     while q:
         item = q.popleft()
@@ -34,11 +34,11 @@ def breadth_first_search(source_directory: str, target: str, approximate: str) -
             if targeted_search:
                 compare(target, nbr, approximate_search, results)
                 if not approximate_search and results:
-                    return f"Target: {target} was found"
+                    return f"Target: {target} was found. Path: {item}/{target}"
 
             if "." in nbr:
                 if not targeted_search:
-                    results.append(nbr)
+                    results.append(f"{item}/{nbr}")
                 continue
             q.append(f"{item}/{nbr}")
 
@@ -58,7 +58,7 @@ def depth_first_search(source_directory: str, target: str, approximate: str) -> 
     if targeted_search:
         compare(target, source_directory, approximate_search, results)
         if not approximate_search and results:
-            return f"Target: {target} was found"
+            return f"Target: {target} was found. Path: {source}/{target}"
 
     while stack:
         item = stack.pop()
@@ -74,11 +74,11 @@ def depth_first_search(source_directory: str, target: str, approximate: str) -> 
             if targeted_search:
                 compare(target, nbr, approximate_search, results)
                 if not approximate_search and results:
-                    return f"Target: {target} was found"
+                    return f"Target: {target} was found. Path: {item}/{target}"
                 
             if "." in nbr:
                 if not targeted_search:
-                    results.append(nbr)
+                    results.append(f"{item}/{nbr}")
                 continue
             stack.append(f"{item}/{nbr}")
 
