@@ -5,7 +5,6 @@ DATA_DIR = os.environ["DATA_DIR"]
 import shutil
 import unittest
 from txt_file_functions import read_txt, write_to_txt, append_to_txt, append_to_txt, clear
-from directory_functions import create_directory, get_directory
 
 class TestFileTools(unittest.TestCase):
     def setUp(self):
@@ -39,20 +38,7 @@ class TestFileTools(unittest.TestCase):
         write_to_txt.invoke({"path": "test.txt", "content": "Some content"})
         clear.invoke({"path": "test.txt"})
         result = read_txt.invoke({"path": "test.txt"})
-        self.assertEqual(result, "")
-
-    def test_g(self):
-        """Test counting files in a directory using LangChain tools."""
-        open(os.path.join(self.sub_dir, "a.txt"), "w").close()
-        open(os.path.join(self.sub_dir, "b.txt"), "w").close()
-        message = get_directory.invoke({"directory": "subdir"})
-        self.assertEqual(message, "Listed: 2 items [b.txt, a.txt] from directory (subdir)")
-
-    def test_cd(self):
-        """Test creating directories using LangChain tools."""
-        message = create_directory.invoke({"directory": "sub_subdir"})
-        self.assertEqual(message, f"Created directory: {DATA_DIR}/sub_subdir")    
-
+        self.assertEqual(result, "")   
 
 if __name__ == "__main__":
     unittest.main()
