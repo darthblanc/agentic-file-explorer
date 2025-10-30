@@ -18,12 +18,12 @@ class TestDirectoryFunctions(unittest.TestCase):
             shutil.rmtree(DATA_DIR)
 
     def test_f_creates_data_directory(self):
-        """Test that f creates the 'data' directory."""
+        """Test that f creates the 'test' directory."""
         construct_file_path("testfile.txt")
         self.assertTrue(os.path.isdir(DATA_DIR))
 
     def test_g_creates_subdirectory(self):
-        """Test that g creates 'data/{directory name}' directory."""
+        """Test that g creates 'test/{directory name}' directory."""
         construct_directory_path("subdir")
         self.assertTrue(os.path.isdir(os.path.join(DATA_DIR, "subdir")))
 
