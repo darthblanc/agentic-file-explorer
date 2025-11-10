@@ -1,11 +1,16 @@
-from langchain.tools import tool
+from langchain_core.tools import StructuredTool
 import os
 from collections import deque
 from compare import compare
 from setup_directory import construct_directory_path_limited
+from pydantic import BaseModel, Field
 
-@tool(description="Perform a Breadth First Search (BFS) traversal on a source directory. Set target as 'null' for a targeted search By default set as 'null'. Set approximate as 'Yes' for an approximate search. By default set as 'No'")
-def breadth_first_search(source_directory: str, target: str, approximate: str) -> str:
+class SearchArgs(BaseModel):
+    source_directory: str = Field(..., description="The directory path to start searching from.")
+    target: str = Field("null", description="The name of the file or directory to find. Defaults to 'null' if unspecified.")
+    approximate: str = Field("No", description="If 'Yes', enables approximate/fuzzy matching. Any other value disables it.")
+
+def breadth_first_search(source_directory: str, target: str = "null", approximate: str = "No") -> str:
     source = str(construct_directory_path_limited(source_directory))
     targeted_search = target != "null"
     approximate_search = approximate == "Yes"
@@ -45,8 +50,7 @@ def breadth_first_search(source_directory: str, target: str, approximate: str) -
     approximate_search_clause = "(including approximate search results)" if approximate_search else ""
     return f"Breadth First Traversal Result {approximate_search_clause}: {results}"
 
-@tool(description="Perform a Depth First Search (DFS) traversal on a source directory. Set target as 'null' for a targeted search By default set as 'null'. Set approximate as 'Yes' for an approximate search. By default set as 'No'")
-def depth_first_search(source_directory: str, target: str, approximate: str) -> str:
+def depth_first_search(source_directory: str, target: str = "null", approximate: str = "No") -> str:
     source = str(construct_directory_path_limited(source_directory))
     targeted_search = target != "null"
     approximate_search = approximate == "Yes"
@@ -85,7 +89,18 @@ def depth_first_search(source_directory: str, target: str, approximate: str) -> 
     approximate_search_clause = "(including approximate search results)" if approximate_search else ""
     return f"Depth First Traversal Result {approximate_search_clause}: {results}"
 
+bfs_tool = StructuredTool.from_function(
+    func=breadth_first_search,
+    args_schema=SearchArgs,
+    description="Performs a breadth-first search (BFS) through the filesystem. The path(s) to matching file(s) or directories, or an informative message if not found."
+)
+
+dfs_tool = StructuredTool.from_function(
+    func=depth_first_search,
+    args_schema=SearchArgs,
+    description="Performs a depth-first search (DFS) through the filesystem. The path(s) to matching file(s) or directories, or an informative message if not found."
+)
 traversal_tools = [
-    breadth_first_search,
-    depth_first_search
+    bfs_tool,
+    dfs_tool
 ]
