@@ -1,29 +1,19 @@
-from langchain.tools import tool
+from langchain.tools import tool, ToolException
 from setup_directory import construct_directory_path
 import os
+from typing import List
 
 @tool(description="List the files and subdirectories in a specified directory.")
-def get_directory(directory: str) -> str:
+def get_directory_content(directory: str) -> List[str]:
     try:
         working_path = construct_directory_path(directory)
     except Exception as e:
-        return f"{e}"
-    
-    content = os.listdir(working_path)
-    directory_size = len(content)
-    size_string = ""
-
-    if directory_size > 1:
-        size_string = f"{directory_size} items [{", ".join(content)}]"
-    elif directory_size == 1:
-        size_string = f"{directory_size} item [{", ".join(content)}]"
-    else:
-        size_string = f"{directory_size} items"
+        raise ToolException(e)
 
     try:
-        return f"Listed: {size_string} from directory ({directory})"
+        return os.listdir(working_path)
     except Exception as e:
-        return f"Error encountered while reading from directory ({directory}): {e}"
+        raise ToolException(e)
     
 @tool(description="Create a specified directory.")
 def create_directory(directory: str) -> str:
@@ -31,9 +21,9 @@ def create_directory(directory: str) -> str:
         working_path = construct_directory_path(directory)
         return f"Created directory: {working_path}"
     except Exception as e:
-        return f"{e}"
+        raise ToolException(e)
     
 directory_tools = [
-    get_directory,
+    get_directory_content,
     create_directory
 ]
