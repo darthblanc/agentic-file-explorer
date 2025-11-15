@@ -192,7 +192,7 @@ with gr.Blocks(css=custom_css) as demo:
                 container=False,
                 elem_classes=["input-box"],
                 lines=1,
-                max_lines=1
+                max_lines=30
             )
             submit = gr.Button("Send", elem_classes=["primary"], scale=0, min_width=80)
         
