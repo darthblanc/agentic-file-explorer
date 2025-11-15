@@ -4,6 +4,7 @@ os.environ.setdefault("DATA_DIR", "data")
 from langchain_ollama import ChatOllama
 from langchain.agents import create_agent
 from agent_tools import tools
+from logger import logger
 
 system_prompt = ""
 
@@ -20,4 +21,5 @@ def my_agent(human_message: str, context=[]):
     )
 
     response = agent.invoke({"messages": context})
+    logger(True, response, "agentic-ui.log")
     return response["messages"][-1].content
