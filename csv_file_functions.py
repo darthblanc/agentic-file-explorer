@@ -1,4 +1,4 @@
-from langchain.tools import tool
+from langchain.tools import tool, ToolException
 from setup_directory import construct_file_path
 import csv
 from typing import List, Dict
@@ -22,7 +22,7 @@ def read_csv(path: str) -> str:
                         sub_dict[headers[j]] = item
                     rv.append(sub_dict)
     except Exception as e:
-        return f"Error encountered while reading from file ({path}): {e}"
+        raise ToolException(e)
     return json.dumps(rv)
 
 @tool(description="""Write new content to a csv file specified by a path. Content should be formatted similar to [{"col_a": "val_a"}, {"col_b": "val_b"}] where "col_a" and "col_b" are column names and in the column_names parameter. This tool will overwrite the previous content of the csv file.""")
@@ -36,7 +36,7 @@ def write_to_csv(path: str, data: List[Dict[str, str]], column_names: List[str])
             writer.writerows(data)
             return f"Wrote: content to ({path})"
     except Exception as e:
-        return f"Error encountered while writing to file ({path}): {e}"
+        raise ToolException(e)
     
 @tool(description="""Append new content to a csv file specified by a path. Content should be formatted similar to [{"col_a": "val_a"}, {"col_b": "val_b"}] where "col_a" and "col_b" are column names and in the column_names parameter. This tool will write each row to the next available row in the csv file.""")
 def append_to_csv(path: str, data: List[Dict[str, str]], column_names: List[str]) -> str:
@@ -48,7 +48,7 @@ def append_to_csv(path: str, data: List[Dict[str, str]], column_names: List[str]
             writer.writerows(data)
             return f"Wrote: content to ({path})"
     except Exception as e:
-        return f"Error encountered while writing to file ({path}): {e}"
+        raise ToolException(e)
 
 
 csv_tools = [
