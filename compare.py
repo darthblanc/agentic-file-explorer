@@ -1,5 +1,6 @@
 from difflib import SequenceMatcher
-from typing import List
+from typing import Dict, List
+from string_functions import strip_base_directory
 
 def isEqual(target: str, candidate: str) -> bool:
     return target == candidate
@@ -7,10 +8,11 @@ def isEqual(target: str, candidate: str) -> bool:
 def isApproximatelyEqual(target: str, candidate: str) -> bool:
     return SequenceMatcher(None, target, candidate).ratio() > 0.8
 
-def compare(target: str, candidate: str, approximate_search: bool, results: List[str]) -> None:
-    if approximate_search:
-        if isApproximatelyEqual(target, candidate):
-            results.append(candidate)
+def compare(directory: str, target: str, candidate: str, approximate_search: bool, results: Dict[str, List[str]]) -> None:
+    if isEqual(target, candidate):
+            results["match"].append(strip_base_directory(f"{directory}/{candidate}"))
     else:
-        if isEqual(target, candidate):
-            results.append(candidate)
+        if approximate_search:
+            if isApproximatelyEqual(target, candidate):
+                results["fuzzy"].append(strip_base_directory(f"{directory}/{candidate}"))
+
