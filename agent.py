@@ -4,7 +4,8 @@ os.environ.setdefault("DATA_DIR", "data")
 from langchain_ollama import ChatOllama
 from langchain.agents import create_agent
 from agent_tools import tools
-from logger import logger
+from logger import logger, ctx_logger
+from context import trim_context
 
 system_prompt = ""
 
@@ -19,7 +20,12 @@ def my_agent(human_message: str, context=[]):
         tools=tools,
         system_prompt=system_prompt
     )
+    trimmed_context = trim_context(context)
+    response = agent.invoke({"messages": trimmed_context}) # type: ignore
+    # logger(True, response, "agentic-ui.log")
 
-    response = agent.invoke({"messages": context})
-    logger(True, response, "agentic-ui.log")
-    return response["messages"][-1].content
+    response_content = response["messages"][-1].content
+    ctx_logger(True, trimmed_context + [{"role": "assistant", "content": response_content}])
+
+    new_context = {"messages": context + [{"role": "assistant", "content": response_content}]}
+    return response_content, new_context
