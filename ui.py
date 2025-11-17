@@ -13,8 +13,8 @@ def chat_with_agent(message, history):
         The agent's response (string)
     """
     # Example response - replace with your agent's actual response
-    response = my_agent(message, history)
-    return response
+    response, history = my_agent(message, history)
+    return response, history
 
 # Color options for bot messages
 COLOR_OPTIONS = {
@@ -252,9 +252,8 @@ with gr.Blocks(css=custom_css) as demo:
         yield "", chat_history
 
         # Then bot responds
-        bot_message = chat_with_agent(message, chat_history)
-        chat_history.append({"role": "assistant", "content": bot_message})
-        yield "", chat_history
+        bot_message, chat_history = chat_with_agent(message, chat_history)
+        yield "", chat_history["messages"]
     
     # Toggle between pages
     def show_settings_page():
