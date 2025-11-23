@@ -1,0 +1,31 @@
+{   
+    "description": "Agentic File Explorer Command Line Arguments",
+    "arguments":  {
+        "--model" : {
+            "type": "str",
+            "default": "qwen3:8b",
+            "help": "The LLM model that would be used for the task."
+        },
+        "--temperature" : {
+            "type": "int",
+            "default": 0,
+            "help": "The temperature for the LLM model."
+        },
+        "--verbose": {
+            "action": "store_true",
+            "type": "bool",
+            "default": false,
+            "help": "Enable verbose logging into agentic-fe.log" 
+        },
+        "--username": {
+            "type": "str",
+            "default": "user",
+            "help": "The name of the user."
+        },
+        "--stm": {
+            "type": "bool",
+            "default": true,
+            "help": "Enable short-term memory."
+        }
+    }
+}

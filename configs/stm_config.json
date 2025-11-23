@@ -1,0 +1,12 @@
+{   
+    "CONTEXT_SIZING":
+    {
+        "MAX_CONTEXT_WINDOW": 1000
+    },
+    "SUMMARIZATION_MODEL": {
+        "MODEL_NAME": "llama3.1",
+        "TEMPERATURE": 0,
+        "SYSTEM_PROMPT_FILE": "system_prompts/summary_prompt.txt"
+    },
+    "SYSTEM_PROMPT_FILE": "system_prompts/base_prompt.txt"
+}

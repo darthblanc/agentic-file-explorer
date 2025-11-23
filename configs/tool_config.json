@@ -1,0 +1,39 @@
+{
+    "CSVTools": {
+        "description": "Tools for handling CSV files, including reading, writing, and manipulating CSV data.",
+        "functions": {
+            "read_csv": "Read the contents of a csv file specified by a path.",
+            "write_to_csv": "Write new content to a csv file specified by a path. Content should be formatted similar to [{\"col_a\": \"val_a\"}, {\"col_b\": \"val_b\"}] where \"col_a\" and \"col_b\" are column names and in the column_names parameter. This tool will overwrite the previous content of the csv file.",
+            "append_to_csv": "Append new content to a csv file specified by a path. Content should be formatted similar to [{\"col_a\": \"val_a\"}, {\"col_b\": \"val_b\"}] where \"col_a\" and \"col_b\" are column names and in the column_names parameter."
+        }
+    },
+    "TXTTools": {
+        "description": "Tools for handling text files, including reading, writing, and searching text files.",
+        "functions": {
+            "read_txt": "Read the contents of a txt file specified by a path.",
+            "read_txt_lines": "Read the contents of a txt file specified by a path as a list of lines.",
+            "write_to_txt": "Write new content to a txt file specified by a path. This tool will overwrite the previous content of the txt file.",
+            "append_to_txt": "Write new content to a txt file specified by a path. This tool will append the new content to a new line after the previous content of the txt file.",
+            "clear": "Clear the contents of a file specified by a path."
+    }
+    },
+    "DirectoryTools": {
+        "description": "Tools for managing directories, including creating, deleting, and listing directory contents.",
+        "functions": {
+            "get_directory_content": "Get the contents of a directory specified by a path.",
+            "create_directory": "Create a new directory specified by a path."
+        }
+    },
+    "TraversalTools": {
+        "description": "Tools for traversing file systems, including navigating through directories and finding files.",
+        "functions": {
+            "depth_first_search": "Performs a depth-first search (DFS) through the filesystem. The path(s) to matching file(s) or directories, or an informative message if not found.",
+            "breadth_first_search": "Performs a breadth-first search (BFS) through the filesystem. The path(s) to matching file(s) or directories, or an informative message if not found."
+        },
+        "search_args": {
+            "source_directory": "The directory path from which the search will commence.",
+            "target_name": "The name of the file or directory to search for. Defaults to '' if unspecified.",
+            "approximate": "A boolean indicating whether to use approximate/fuzzy matching (True) or exact matching (False). Defaults to False."
+        }
+    }
+}
