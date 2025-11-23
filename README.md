@@ -78,7 +78,7 @@ uv run main.py --model llama3.1 --verbose --username me --temperature 0.4 --stm 
 - Check out the configs directory. This contains all the primary configurations of the agents used in this project. You would also get more information about the CLI commands here.
 - Check out the system_prompts directory. You can update system prompts here for the orchestrator and summarizer agents here.
 - By default the short term memory agent is run if you run the main.py file.
-- The new short term memory agent capability is not yey integrated with the UI.
+- The new short term memory agent capability is not yet integrated with the UI.
 
 ## User Interface (UI)
 
