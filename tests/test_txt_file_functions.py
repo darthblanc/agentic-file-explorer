@@ -4,7 +4,7 @@ DATA_DIR = os.environ["DATA_DIR"]
 
 import shutil
 import unittest
-from txt_file_functions import read_txt, write_to_txt, append_to_txt, append_to_txt, clear
+from txt_tools import read_txt, write_to_txt, append_to_txt, append_to_txt, clear
 
 class TestFileTools(unittest.TestCase):
     def setUp(self):

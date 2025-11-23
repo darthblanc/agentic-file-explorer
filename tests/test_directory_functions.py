@@ -4,7 +4,7 @@ DATA_DIR = os.environ["DATA_DIR"]
 
 import shutil
 import unittest
-from directory_functions import create_directory, get_directory
+from directory_tools import create_directory, get_directory_content
 
 class TestFileTools(unittest.TestCase):
     def setUp(self):
@@ -24,7 +24,7 @@ class TestFileTools(unittest.TestCase):
         """Test counting files in a directory using LangChain tools."""
         open(os.path.join(self.sub_dir, "a.txt"), "w").close()
         open(os.path.join(self.sub_dir, "b.txt"), "w").close()
-        message = get_directory.invoke({"directory": "subdir"})
+        message = get_directory_content.invoke({"directory": "subdir"})
         self.assertEqual(message, "Listed: 2 items [b.txt, a.txt] from directory (subdir)")
 
     def test_cd(self):
