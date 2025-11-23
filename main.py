@@ -1,31 +1,36 @@
 import os
 os.environ.setdefault("DATA_DIR", "data")
 
+from arguments import parser
 from langchain_ollama import ChatOllama
 from langchain.agents import create_agent
 from agent_tools import tools
 from arguments import parser
-from logger import logger
+# from logger import logger
+from chat_meta import ChatMeta
 
 def main(args):
-    model_name = args.model
-    keep_logs = args.verbose
-    username = args.username
-    temperature = args.temperature
+    chat_meta = ChatMeta(
+        model_name=args.model,
+        keep_logs=args.verbose,
+        username=args.username,
+        temperature=args.temperature,
+        stm=args.stm)
 
-    model = ChatOllama(model=model_name, temperature=temperature)
+    model = ChatOllama(model=chat_meta.model_name, temperature=chat_meta.temperature)
     agent = create_agent(
         model=model,
-        tools=tools
+        tools=tools,
     )
 
-    human_message: str = input(f"{username}: ")
-
-    while human_message:
-        response = agent.invoke({"messages":[{"role": "user", "content": human_message}]})
-        print("Agent:", response["messages"][-1].content)
-        logger(keep_logs=keep_logs, response=response)
-        human_message: str = input(f"{username}: ")
+    if chat_meta.stm:
+        from stm_context_agent import main as stm_main
+        print("Using short-term memory context agent.")
+        stm_main(agent, chat_meta)
+    else:
+        from no_context_agent import main as no_stm_main
+        print("Using no short-term memory context agent.")
+        no_stm_main(agent, chat_meta)
 
 if __name__ == "__main__":
     args = parser.parse_args()
