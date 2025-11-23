@@ -1,32 +1,13 @@
 import argparse
+import json
 
-parser = argparse.ArgumentParser(description="Agentic File Explorer")
+configs = json.load(open("configs/args_config.json", "r"))
+parser = argparse.ArgumentParser(description=configs["description"])
 
-parser.add_argument(
-    "--model",
-    type=str,
-    default="qwen3:8b",
-    choices=["qwen3:8b", "llama3.1", "phi3.5"],
-    help="The LLM model that would be used for the task"
-)
-
-parser.add_argument(
-    "--verbose",
-    action="store_true",
-    default=False,
-    help="Enable verbose logging into agentic-fe.log"
-)
-
-parser.add_argument(
-    "--username",
-    type=str,
-    default="User",
-    help="The name of the user."
-)
-
-parser.add_argument(
-    "--temperature",
-    type=int,
-    default=0,
-    help="The temperature of the model."
-)
+for arg in configs["arguments"]:
+    parser.add_argument(
+        arg,
+        type=eval(configs["arguments"][arg]["type"]),
+        default=configs["arguments"][arg]["default"],
+        help=configs["arguments"][arg]["help"]
+    )
