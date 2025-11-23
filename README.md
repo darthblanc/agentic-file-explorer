@@ -40,6 +40,7 @@ uv run main.py
 | --verbose     | True     | Enable logging to agentic-fe.logs          | --verbose         |
 | --username    | User     | Name of user during flow                   | --username me     |
 | --temperature | 0        | Temperature of the model used for the flow | --temperature 0.4 |
+| --stm         | True     | Enable short term memory                   | --stm             |
 
 Example usage with flags
 
@@ -48,7 +49,8 @@ uv run main.py --model llama3.1 # change the model
 uv run main.py --verbose # allow logging
 uv run main.py --username me # change the user's name
 uv run main.py --temperature 0.4 # change the temperature of the model
-uv run main.py --model llama3.1 --verbose --username me --temperature 0.4 # change everything from the defaults
+uv run main.py --stm # change the temperature of the model
+uv run main.py --model llama3.1 --verbose --username me --temperature 0.4 --stm # change everything from the defaults
 ```
 
 #### Tools
@@ -72,7 +74,11 @@ uv run main.py --model llama3.1 --verbose --username me --temperature 0.4 # chan
 - Everything that the agent does happens in a sandbox (the "data" directory).
 - Be explicit when telling the agent to search. Try key words like "deep" vs "shallow" when trying to do a deep search (so the simple list directory content is not used). Or explicitly state the strategy (incase you are trying to do a BFS over DFS or vice versa).
 - BFS and DFS strategies also support approximate searches as well as exact searches for file and directory names.
-- Look out for the logs of your conversations with the agent in agentic-fe.log for CLI interactions and agentic-ui.log for GUI interactions.
+- Look out for the logs of your conversations with the agent in agentic-fe.log for CLI interactions and agentic-ui.log for GUI interactions (Currently turned off).
+- Check out the configs directory. This contains all the primary configurations of the agents used in this project. You would also get more information about the CLI commands here.
+- Check out the system_prompts directory. You can update system prompts here for the orchestrator and summarizer agents here.
+- By default the short term memory agent is run if you run the main.py file.
+- The new short term memory agent capability is not yey integrated with the UI.
 
 ## User Interface (UI)
 
