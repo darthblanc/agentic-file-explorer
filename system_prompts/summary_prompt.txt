@@ -11,6 +11,8 @@ Do not rewrite or reproduce the full conversation.
 
 Do not include tool call signatures, logs, or raw tokens unless they contain meaningful progress.
 
+Retain file references in format: file:{file_name} e.g: a file with name semantics.txt would become file:semantics.txt
+
 Write in a neutral, third-person, factual style.
 
 Be highly compressed but clear.
