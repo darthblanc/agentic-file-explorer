@@ -1,32 +1,19 @@
-from langchain.tools import tool, ToolException
-from setup_directory import construct_directory_path
-import os
-from typing import List
-import json
+from configs import DIRECTORY_TOOL_DESCRIPTIONS
+from langchain_core.tools import StructuredTool
+from directory_functions import get_content, create
 
-configs = json.load(open("configs/tool_config.json"))
-DIRECTORY_TOOL_DESCRIPTIONS = configs["DirectoryTools"]["functions"]
+get_directory_content = StructuredTool.from_function(
+    func=get_content,
+    name="get_directory_content",
+    description=DIRECTORY_TOOL_DESCRIPTIONS["get_directory_content"],
+)
 
-@tool(description=DIRECTORY_TOOL_DESCRIPTIONS["get_directory_content"])
-def get_directory_content(directory: str) -> List[str]:
-    try:
-        working_path = construct_directory_path(directory)
-    except Exception as e:
-        raise ToolException(e)
+create_directory = StructuredTool.from_function(
+    func=create,
+    name="create_directory",
+    description=DIRECTORY_TOOL_DESCRIPTIONS["create_directory"],
+)
 
-    try:
-        return os.listdir(working_path)
-    except Exception as e:
-        raise ToolException(e)
-    
-@tool(description=DIRECTORY_TOOL_DESCRIPTIONS["create_directory"])
-def create_directory(directory: str) -> str:
-    try:
-        working_path = construct_directory_path(directory)
-        return f"Created directory: {working_path}"
-    except Exception as e:
-        raise ToolException(e)
-    
 directory_tools = [
     get_directory_content,
     create_directory
