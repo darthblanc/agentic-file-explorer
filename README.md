@@ -37,7 +37,7 @@ uv run main.py
 | Flag          | Default  | Description                                | Example           |
 | ------------- | -------- | ------------------------------------------ | ----------------- |
 | --model       | qwen3:8b | The model used for the flow                | --model qwen3:8b  |
-| --verbose     | True     | Enable logging to agentic-fe.logs          | --verbose         |
+| --verbose     | True     | Enable logging to agentic-fe.logs          | --verbose true    |
 | --username    | User     | Name of user during flow                   | --username me     |
 | --temperature | 0        | Temperature of the model used for the flow | --temperature 0.4 |
 | --stm         | True     | Enable short term memory                   | --stm             |
@@ -46,7 +46,7 @@ Example usage with flags
 
 ```
 uv run main.py --model llama3.1 # change the model
-uv run main.py --verbose # allow logging
+uv run main.py --verbose true # allow logging
 uv run main.py --username me # change the user's name
 uv run main.py --temperature 0.4 # change the temperature of the model
 uv run main.py --stm # change the temperature of the model
@@ -79,6 +79,7 @@ uv run main.py --model llama3.1 --verbose --username me --temperature 0.4 --stm 
 - Check out the system_prompts directory. You can update system prompts here for the orchestrator and summarizer agents here.
 - By default the short term memory agent is run if you run the main.py file.
 - The new short term memory agent capability is not yet integrated with the UI.
+- For verbose flag update might break argument parsing behaviour. Use `--verbose true` for now.
 
 ## User Interface (UI)
 
