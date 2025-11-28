@@ -1,13 +1,12 @@
 import argparse
-import json
+from configs import DESCRIPTION, ARGUMENTS
 
-configs = json.load(open("configs/args_config.json", "r"))
-parser = argparse.ArgumentParser(description=configs["description"])
+parser = argparse.ArgumentParser(description=DESCRIPTION)
 
-for arg in configs["arguments"]:
+for arg in ARGUMENTS:
     parser.add_argument(
         arg,
-        type=eval(configs["arguments"][arg]["type"]),
-        default=configs["arguments"][arg]["default"],
-        help=configs["arguments"][arg]["help"]
+        type=eval(ARGUMENTS[arg]["type"]),
+        default=ARGUMENTS[arg]["default"],
+        help=ARGUMENTS[arg]["help"]
     )
