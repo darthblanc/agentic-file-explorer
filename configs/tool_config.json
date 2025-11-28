@@ -2,20 +2,26 @@
     "CSVTools": {
         "description": "Tools for handling CSV files, including reading, writing, and manipulating CSV data.",
         "functions": {
-            "read_csv": "Read the contents of a csv file specified by a path.",
-            "write_to_csv": "Write new content to a csv file specified by a path. Content should be formatted similar to [{\"col_a\": \"val_a\"}, {\"col_b\": \"val_b\"}] where \"col_a\" and \"col_b\" are column names and in the column_names parameter. This tool will overwrite the previous content of the csv file.",
-            "append_to_csv": "Append new content to a csv file specified by a path. Content should be formatted similar to [{\"col_a\": \"val_a\"}, {\"col_b\": \"val_b\"}] where \"col_a\" and \"col_b\" are column names and in the column_names parameter."
+            "read": "Read the contents of a csv file specified by a path.",
+            "write": "Write new content to a csv file specified by a path. Content should be formatted similar to [{\"col_a\": \"val_a\"}, {\"col_b\": \"val_b\"}] where \"col_a\" and \"col_b\" are column names and in the column_names parameter. This tool will overwrite the previous content of the csv file.",
+            "append": "Append new content to a csv file specified by a path. Content should be formatted similar to [{\"col_a\": \"val_a\"}, {\"col_b\": \"val_b\"}] where \"col_a\" and \"col_b\" are column names and in the column_names parameter."
         }
     },
     "TXTTools": {
         "description": "Tools for handling text files, including reading, writing, and searching text files.",
         "functions": {
-            "read_txt": "Read the contents of a txt file specified by a path.",
-            "read_txt_lines": "Read the contents of a txt file specified by a path as a list of lines.",
-            "write_to_txt": "Write new content to a txt file specified by a path. This tool will overwrite the previous content of the txt file.",
-            "append_to_txt": "Write new content to a txt file specified by a path. This tool will append the new content to a new line after the previous content of the txt file.",
+            "read": "Read the contents of a txt file specified by a path.",
+            "write": "Write new content to a txt file specified by a path. This tool will overwrite the previous content of the txt file.",
+            "append": "Append new content to a txt file specified by a path. This tool will append the new content to a new line after the previous content of the txt file.",
             "clear": "Clear the contents of a file specified by a path."
-    }
+    },
+        "read_args": {
+            "path": "The file path to read from."
+        },
+        "write_args": {
+            "path": "The file path to write to.",
+            "content": "The content to write to the file."
+        }
     },
     "DirectoryTools": {
         "description": "Tools for managing directories, including creating, deleting, and listing directory contents.",
