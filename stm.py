@@ -1,7 +1,7 @@
 from typing import List
 from pydantic import BaseModel
 from langchain.messages import AnyMessage
-from context import trim_context, count_tokens
+from context import trim_context, count_tokens, inject_system_prompts
 
 class MessageContext(BaseModel):
     messages: List[AnyMessage]
@@ -25,4 +25,5 @@ class ShortTermMemory(BaseModel):
             self.message_contexts.messages = messages
             self.token_count = count_tokens("".join([message.content for message in messages]))  # type: ignore
 
+        messages = inject_system_prompts(messages)
         return messages
