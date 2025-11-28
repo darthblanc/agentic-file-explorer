@@ -1,13 +1,10 @@
 import chat_meta
-from langchain.messages import AIMessage, HumanMessage, SystemMessage
+from langchain.messages import AIMessage, HumanMessage
 from stm import ShortTermMemory, MessageContext
-from stm_loader import load_system_prompt, load_stm_config
-from context import count_tokens
+from logger import logger
 
 def main(agent, chat_meta: chat_meta.ChatMeta):
-    configs = load_stm_config()
-    SYSTEM_PROMPT = load_system_prompt(configs["SYSTEM_PROMPT_FILE"])
-    stm = ShortTermMemory(message_contexts=MessageContext(messages=[SystemMessage(content=SYSTEM_PROMPT)]), token_count=count_tokens(SYSTEM_PROMPT))
+    stm = ShortTermMemory(message_contexts=MessageContext(messages=[]), token_count=0)
 
     while True:
         user_prompt = input(f"{chat_meta.username}: ")
@@ -22,3 +19,4 @@ def main(agent, chat_meta: chat_meta.ChatMeta):
         
         print("\n\n")
         stm.add_message(AIMessage(content=response))
+        logger(chat_meta.keep_logs, stm.get_message_contexts().model_dump(), filename="agentic.log")
