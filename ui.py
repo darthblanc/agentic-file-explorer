@@ -1,20 +1,9 @@
 import gradio as gr
-from agent import my_agent
+from agent import agent_for_ui
 
-def chat_with_agent(message, history):
-    """
-    Your agent logic goes here.
-    
-    Args:
-        message: The current user message (string)
-        history: List of [user_msg, assistant_msg] pairs
-    
-    Returns:
-        The agent's response (string)
-    """
-    # Example response - replace with your agent's actual response
-    response, history = my_agent(message, history)
-    return response, history
+def chat_with_agent(message):
+    for token in agent_for_ui(user_prompt=message):
+        yield token
 
 # Color options for bot messages
 COLOR_OPTIONS = {
@@ -243,18 +232,17 @@ with gr.Blocks(css=custom_css) as demo:
     """)
 
     def respond(message, chat_history):
-        if not message.strip():
-            yield "", chat_history
-            return
+        chat_history = chat_history + [{"role": "user", "content": message}]
+        yield chat_history
 
-        # Immediately show user message
-        chat_history.append({"role": "user", "content": message})
-        yield "", chat_history
+        response = None
+        for token in chat_with_agent(message):
+            if not response:
+                response = {"role": "assistant", "content": ""}
+                chat_history.append(response)
+            chat_history[-1]["content"] += token
+            yield chat_history
 
-        # Then bot responds
-        bot_message, chat_history = chat_with_agent(message, chat_history)
-        yield "", chat_history["messages"]
-    
     # Toggle between pages
     def show_settings_page():
         return gr.update(visible=False), gr.update(visible=True)
@@ -290,9 +278,14 @@ with gr.Blocks(css=custom_css) as demo:
         inputs=[color_radio],
         outputs=[color_preview, style_html, current_color]
     )
+
+    def clear_textbox():
+        return ""
     
-    msg.submit(respond, [msg, chatbot], [msg, chatbot])
-    submit.click(respond, [msg, chatbot], [msg, chatbot])
+    msg.submit(clear_textbox, None, msg)
+    msg.submit(respond, [msg, chatbot], [chatbot])
+    submit.click(clear_textbox, None, msg)
+    submit.click(respond, [msg, chatbot], [chatbot])
 
 if __name__ == "__main__":
     demo.launch()
