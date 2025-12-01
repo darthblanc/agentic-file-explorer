@@ -1,4 +1,4 @@
 {
-    "SYSTEM_PROMPT_FILE": "system_prompts/base_prompt.txt",
-    "REFERENCE_INSTRUCTIONS_FILE": "system_prompts/reference_instructions.txt"
+    "SYSTEM_PROMPT_FILE": "prompts/system_prompts/base_prompt.txt",
+    "REFERENCE_INSTRUCTIONS_FILE": "prompts/system_prompts/reference_instructions.txt"
 }
