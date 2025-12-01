@@ -1,0 +1,9 @@
+Summarize the entire conversation thread above.  
+Produce a concise, neutral, well-structured summary that captures:  
+• the main topics  
+• key questions and answers  
+• decisions or conclusions  
+• any unresolved items  
+
+Integrate relevant earlier summaries if present.  
+Do not include meta-comments about the summarization process.  
