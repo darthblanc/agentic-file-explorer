@@ -6,6 +6,7 @@
     "SUMMARIZATION_MODEL": {
         "MODEL_NAME": "llama3.1",
         "TEMPERATURE": 0,
-        "SYSTEM_PROMPT_FILE": "system_prompts/summary_prompt.txt"
-    }
+        "SYSTEM_PROMPT_FILE": "prompts/system_prompts/summary_prompt.txt"
+    },
+    "ASSISTANT_PROMPT_FILE": "prompts/assistant_prompts/summary_prompt.txt"
 }
