@@ -4,6 +4,8 @@ ARG_CONFIGS = json.load(open("configs/args_config.json", "r"))
 DESCRIPTION  = ARG_CONFIGS["description"]
 ARGUMENTS = ARG_CONFIGS["arguments"]
 
+UI_CONFIGS = json.load(open("configs/ui_configs.json", "r"))
+
 BASE_MODEL_CONFIG = json.load(open("configs/base_model_config.json", "r"))
 SYSTEM_PROMPT_FILE = BASE_MODEL_CONFIG["SYSTEM_PROMPT_FILE"]
 BASE_SYSTEM_PROMPT = open(SYSTEM_PROMPT_FILE, "r").read()
