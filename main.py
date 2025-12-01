@@ -6,7 +6,6 @@ from langchain_ollama import ChatOllama
 from langchain.agents import create_agent
 from agent_tools import tools
 from arguments import parser
-# from logger import logger
 from chat_meta import ChatMeta
 
 def main(args):
