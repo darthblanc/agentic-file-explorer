@@ -1,0 +1,22 @@
+{
+    "model" : {
+        "default": "qwen3:8b",
+        "help": "The LLM model that would be used for the task."
+    },
+    "temperature" : {
+        "default": 0,
+        "help": "The temperature for the LLM model."
+    },
+    "verbose": {
+        "default": false,
+        "help": "Enable verbose logging into agentic-fe.log" 
+    },
+    "username": {
+        "default": "user",
+        "help": "The name of the user."
+    },
+    "stm": {
+        "default": true,
+        "help": "Enable short-term memory."
+    }
+}
