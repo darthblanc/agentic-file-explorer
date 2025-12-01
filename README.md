@@ -72,14 +72,13 @@ uv run main.py --model llama3.1 --verbose --username me --temperature 0.4 --stm 
 - qwen3:8b has the best performance of the three, in terms of experimentation so far.
 - Check out some other [integration packages](https://docs.langchain.com/oss/python/integrations/providers/overview).
 - Everything that the agent does happens in a sandbox (the "data" directory).
-- Be explicit when telling the agent to search. Try key words like "deep" vs "shallow" when trying to do a deep search (so the simple list directory content is not used). Or explicitly state the strategy (incase you are trying to do a BFS over DFS or vice versa).
-- BFS and DFS strategies also support approximate searches as well as exact searches for file and directory names.
-- Look out for the logs of your conversations with the agent in agentic-fe.log for CLI interactions and agentic-ui.log for GUI interactions (Currently turned off).
-- Check out the configs directory. This contains all the primary configurations of the agents used in this project. You would also get more information about the CLI commands here.
-- Check out the system_prompts directory. You can update system prompts here for the orchestrator and summarizer agents here.
+- BFS and DFS strategies support approximate searches as well as exact searches for file and directory names.
+- Look out for the logs of your conversations in the logs directory.
+- Check out the configs directory. This contains all the primary configurations of the agent.
+- Check out the prompts directory. This contains pre-defined prompts for the agent.
 - By default the short term memory agent is run if you run the main.py file.
-- The new short term memory agent capability is not yet integrated with the UI.
 - For verbose flag update might break argument parsing behaviour. Use `--verbose true` for now.
+- The new short term memory capability has been integrated with the UI.
 
 ## User Interface (UI)
 
