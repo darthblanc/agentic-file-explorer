@@ -2,7 +2,7 @@ from langchain_text_splitters import TokenTextSplitter
 from typing import Dict, List, Tuple
 from langchain.messages import HumanMessage, SystemMessage, AIMessage, AnyMessage
 from stm_loader import load_summarization_agent
-from configs import CONTEXT_SIZING, SUMMARIZATION_MODEL, BASE_SYSTEM_PROMPT, REFERENCE_INSTRUCTIONS
+from configs import CONTEXT_SIZING, SUMMARIZATION_MODEL, BASE_SYSTEM_PROMPT, REFERENCE_INSTRUCTIONS, ASSISTANT_PROMPT
 from file_dictionary import file_dict
 
 def count_context_tokens(messages: List[Dict[str, str]]):
@@ -20,7 +20,7 @@ def trim_context(messages: List[AnyMessage], token_count: int) -> Tuple[bool, Li
         print("Trimming context...")
         print(f"Current Context Size: {token_count}, Effective Context Size: {MAX_CONTEXT_WINDOW}")
         response = ""
-        for token in agent.stream({"messages": messages[:-1] + [HumanMessage(content="Summarise the following conversation focus on retaining information on goals, plans, knowledge. Ensure that you maintain the flow conversation.")]}, stream_mode="messages"): # type: ignore
+        for token in agent.stream({"messages": messages[:-1] + [HumanMessage(content=ASSISTANT_PROMPT)]}, stream_mode="messages"): # type: ignore
             if token[0].type == "AIMessageChunk": # type: ignore
                 response += token[0].content  # type: ignore
         print(f"SUMMARY:\n{response}\n")
