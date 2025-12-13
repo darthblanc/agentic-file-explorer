@@ -1,5 +1,8 @@
 import json
 
+SANDBOX_CONFIG = json.load(open("configs/sandbox_config.json", "r"))
+SANDBOX_DIR = SANDBOX_CONFIG["sandbox"]
+
 ARG_CONFIGS = json.load(open("configs/args_config.json", "r"))
 DESCRIPTION  = ARG_CONFIGS["description"]
 ARGUMENTS = ARG_CONFIGS["arguments"]
