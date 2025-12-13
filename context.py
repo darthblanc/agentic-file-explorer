@@ -20,10 +20,12 @@ def trim_context(messages: List[AnyMessage], token_count: int) -> Tuple[bool, Li
         print("Trimming context...")
         print(f"Current Context Size: {token_count}, Effective Context Size: {MAX_CONTEXT_WINDOW}")
         response = ""
-        for token in agent.stream({"messages": messages[:-1] + [HumanMessage(content=ASSISTANT_PROMPT)]}, stream_mode="messages"): # type: ignore
+        for token in agent.stream({"messages": messages[:-1] + [HumanMessage(content=ASSISTANT_PROMPT + messages[-1].content)]}, stream_mode="messages"): # type: ignore
             if token[0].type == "AIMessageChunk": # type: ignore
                 response += token[0].content  # type: ignore
-        print(f"SUMMARY:\n{response}\n")
+        
+        response = "Last messages summary:\n" + response
+        print(f"\n{response}\n")
         print("Trimmed context successfully.")
         print("=======================INTERRUPTION END============================\n")
         return True, [AIMessage(content=response), messages[-1]]
