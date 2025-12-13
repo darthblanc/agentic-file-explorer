@@ -1,5 +1,6 @@
+from configs import SANDBOX_DIR
 import os
-os.environ.setdefault("DATA_DIR", "data")
+os.environ.setdefault("DATA_DIR", SANDBOX_DIR)
 
 from chat_meta import ChatMeta
 from langchain_ollama import ChatOllama
