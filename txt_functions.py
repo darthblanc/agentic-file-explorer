@@ -1,6 +1,3 @@
-import os
-os.environ.setdefault("DATA_DIR", "data")
-
 from langchain.tools import ToolException
 from setup_directory import construct_file_path
 from file_dictionary import file_dict
