@@ -43,4 +43,3 @@ txt_tools = [
 
 # Provide a simple alias `clear` so existing tests that import `clear` continue to work
 clear = clear_txt
-
