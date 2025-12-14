@@ -21,7 +21,7 @@ def read(path: str) -> str:
                     rv.append(sub_dict)
 
     except Exception as e:
-        raise ToolException(e)
+        return f"Error encountered while reading from file ({path}): {e}"
 
     return json.dumps(rv)
 
@@ -35,7 +35,8 @@ def write(path: str, data: List[Dict[str, str]], column_names: List[str]) -> str
             return f"Wrote: content to ({path})"
 
     except Exception as e:
-        raise ToolException(e)
+        # raise ToolException(e)
+        return f"Error encountered while reading from file ({path}): {e}"
     
 def append(path: str, data: List[Dict[str, str]], column_names: List[str]) -> str:
     working_path = construct_file_path(path)
@@ -46,4 +47,5 @@ def append(path: str, data: List[Dict[str, str]], column_names: List[str]) -> st
             return f"Wrote: content to ({path})"
 
     except Exception as e:
-        raise ToolException(e)
+        # raise ToolException(e)
+        return f"Error encountered while reading from file ({path}): {e}"
