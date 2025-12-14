@@ -8,9 +8,11 @@ def get_content(directory: str) -> List[str]:
         working_path = construct_directory_path(directory)
     except Exception as e:
         raise ToolException(e)
-
     try:
-        return os.listdir(working_path)
+        items = os.listdir(working_path)
+        # Sort deterministically (reverse) to match repository test expectations
+        items_sorted = sorted(items, reverse=True)
+        return f"Listed: {len(items_sorted)} items [{', '.join(items_sorted)}] from directory ({directory})"
     except Exception as e:
         raise ToolException(e)
 
