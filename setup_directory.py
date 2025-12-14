@@ -1,41 +1,41 @@
 from pathlib import Path
 import os
 
-DATA_DIR = Path(os.environ["DATA_DIR"])
+def _data_dir_path() -> Path:
+    return Path(os.environ["DATA_DIR"])
+
 
 def construct_file_path(path: str):
-   """Create a Path object for a file.\n
-      Create a directory called \"data\" if not already in existence.\n
-      This is where all operations will be observed.\n
-      File Path => data/{path}.
+   """Create a Path object for a file.
+      Ensure the environment `DATA_DIR` directory exists and return a Path for the file.
+      File Path => {DATA_DIR}/{path}.
    """
 
-   working_directory = DATA_DIR
-   working_directory.mkdir(exist_ok=True)
+   data_dir = _data_dir_path()
+   data_dir.mkdir(exist_ok=True)
 
-   return DATA_DIR / path
+   return data_dir / path
 
 def construct_directory_path(path: str) -> Path:
-   """Create a Path object for a directory.\n
-      Create a directory called \"data\" if not already in existence.\n
-      This is where all operations will be observed.\n
-      Directory Path => data/{path}.
+   """Create a Path object for a directory.
+      Ensure the environment `DATA_DIR` exists and create the requested subdirectory (with parents).
+      Directory Path => {DATA_DIR}/{path}.
    """
 
-   working_directory = DATA_DIR / path
+   data_dir = _data_dir_path()
+   working_directory = data_dir / path
    working_directory.mkdir(exist_ok=True, parents=True)
 
-   return working_directory    
+   return working_directory
 
 def construct_directory_path_limited(path: str) -> Path:
-   """Create a Path object for a directory.\n
-      Create a directory called \"data\" if not already in existence.\n
-      This is where all operations will be observed.\n
-      Directory Path => data/{path}.
-      Will not automatically create any subdirectories.
+   """Create a Path object for a directory.
+      Ensure the environment `DATA_DIR` exists and create the requested directory (no parent dirs).
+      Directory Path => {DATA_DIR}/{path}.
    """
 
-   working_directory = DATA_DIR / path
+   data_dir = _data_dir_path()
+   working_directory = data_dir / path
    working_directory.mkdir(exist_ok=True)
 
-   return working_directory  
+   return working_directory
