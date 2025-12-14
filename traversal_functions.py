@@ -34,7 +34,10 @@ def inner_search(search_object: SearchObject) -> bool:
     for nbr in os.listdir(directory):
         if targeted_search:
             compare(directory, target, nbr, approximate_search, results)
-            if not approximate_search and results:
+            # Only return early when a real match (or fuzzy match in approximate mode) was appended
+            if not approximate_search and results.get("match"):
+                return True
+            if approximate_search and (results.get("match") or results.get("fuzzy")):
                 return True
 
         if "." in nbr:
