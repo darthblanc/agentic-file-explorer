@@ -1,137 +1,174 @@
 # Agentic File Explorer
 
-Ensure you have [Ollama](https://ollama.com/download/linux) installed. This is what allows us run our LLMs locally.  
-File explorer that uses an [Agent](https://docs.langchain.com/oss/python/langchain/agents#example-of-react-loop) to perform tasks such as file reading, writing, and summarization.  
-Check out the [Langchain Docs](https://docs.langchain.com/) to understand the tools used through out the project.  
-Check out the [Gradio Docs](https://www.gradio.app/docs) to familiarise yourself with Gradio to understand the tools used for the UI.
+A file explorer powered by AI agents that can read, write, search, and manage files through natural language commands. Built with LangChain and Gradio, it runs locally using Ollama.
 
-## Getting Started
+## Overview
 
-#### Set up Llama
+This project implements an intelligent file management system using a [ReAct agent](https://docs.langchain.com/oss/python/langchain/agents#example-of-react-loop) that can understand and execute file operations through conversation. All operations happen in a sandboxed environment for safety.
 
+**Key Features:**
+
+- Natural language file operations (read, write, append, search)
+- Smart file search with BFS/DFS strategies
+- Short-term memory for contextual conversations
+- Interactive UI built with Gradio
+- Runs entirely locally with Ollama
+
+## Prerequisites
+
+Install [Ollama](https://ollama.com/download/linux) to run LLMs locally.
+
+## Quick Start
+
+1. **Pull the recommended model:**
+
+   ```bash
+   ollama pull qwen3:8b
+   ```
+
+2. **Install UV package manager:**
+
+   ```bash
+   # Using curl
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+
+   # Or using wget
+   wget -qO- https://astral.sh/uv/install.sh | sh
+   ```
+
+3. **Set up the environment:**
+
+   ```bash
+   uv sync
+   ```
+
+4. **Run the agent:**
+
+   ```bash
+   uv run main.py
+   ```
+
+5. **Launch the UI (optional):**
+   ```bash
+   uv run ui.py
+   ```
+
+## Available Tools
+
+| Tool                 | Description                                  | Supported Formats   |
+| -------------------- | -------------------------------------------- | ------------------- |
+| **Read**             | Read file contents                           | `.txt`, `.csv`      |
+| **Write**            | Write or overwrite file contents             | `.txt`, `.csv`      |
+| **Append**           | Append content to a new line                 | `.txt`, `.csv`      |
+| **Clear**            | Clear file contents (manual enable required) | `.txt`, `.csv`      |
+| **List Directory**   | Display files and subdirectories             | All                 |
+| **Create Directory** | Create new directories                       | N/A                 |
+| **BFS Search**       | Breadth-first file system search             | Files & directories |
+| **DFS Search**       | Depth-first file system search               | Files & directories |
+
+## Configuration
+
+### Command-Line Flags
+
+| Flag            | Default    | Description                         |
+| --------------- | ---------- | ----------------------------------- |
+| `--model`       | `qwen3:8b` | LLM model to use                    |
+| `--verbose`     | `true`     | Enable logging to `agentic-fe.logs` |
+| `--username`    | `User`     | Display name for the user           |
+| `--temperature` | `0`        | Model temperature (0-1)             |
+| `--stm`         | `true`     | Enable short-term memory            |
+
+### Usage Examples
+
+```bash
+# Change model
+uv run main.py --model llama3.1
+
+# Enable verbose logging
+uv run main.py --verbose true
+
+# Set custom username
+uv run main.py --username alice
+
+# Adjust temperature for more creative responses
+uv run main.py --temperature 0.7
+
+# Combine multiple flags
+uv run main.py --model llama3.1 --username alice --temperature 0.4 --stm
 ```
-ollama pull qwen3:8b
-```
 
-#### Install [UV](https://docs.astral.sh/uv/getting-started/installation/) using one of the commands below
+## User Interface
 
-```
-curl -LsSf https://astral.sh/uv/install.sh | sh # curl
-wget -qO- https://astral.sh/uv/install.sh | sh # wget
-```
+Run the Gradio UI for an interactive chat experience:
 
-#### Set up Environment (create environment and install dependencies)
-
-```
-uv sync
-```
-
-#### Run the agent
-
-```
-uv run main.py
-```
-
-#### Flags
-
-| Flag          | Default  | Description                                | Example           |
-| ------------- | -------- | ------------------------------------------ | ----------------- |
-| --model       | qwen3:8b | The model used for the flow                | --model qwen3:8b  |
-| --verbose     | True     | Enable logging to agentic-fe.logs          | --verbose true    |
-| --username    | User     | Name of user during flow                   | --username me     |
-| --temperature | 0        | Temperature of the model used for the flow | --temperature 0.4 |
-| --stm         | True     | Enable short term memory                   | --stm             |
-
-Example usage with flags
-
-```
-uv run main.py --model llama3.1 # change the model
-uv run main.py --verbose true # allow logging
-uv run main.py --username me # change the user's name
-uv run main.py --temperature 0.4 # change the temperature of the model
-uv run main.py --stm # change the temperature of the model
-uv run main.py --model llama3.1 --verbose --username me --temperature 0.4 --stm # change everything from the defaults
-```
-
-#### Tools
-
-| Tool                   | Description                                                                                | Supports       |
-| ---------------------- | ------------------------------------------------------------------------------------------ | -------------- |
-| Read                   | Read the content of a specified file.                                                      | txt, csv files |
-| Write                  | Write content to a specified file (overrides previous content too)                         | txt, csv files |
-| Append                 | Append content to a new line in a specified file                                           | txt, csv files |
-| Clear                  | Clear the content of a specified file (can be enabled manually in basic_file_functions.py) | txt, csv files |
-| List Directory Content | Get the immediate files and sub directories of a specified directory                       |                |
-| Create Directory       | Create a specified directory                                                               |                |
-| BFS for File System    | BFS strategy for searching directories                                                     | File search    |
-| DFS for File System    | DFS strategy for searching directories                                                     | File search    |
-
-#### Notes
-
-- Some supported LLMs are qwen3:8b, llama3.1, phi3.5 from [Ollama](https://ollama.com/library)
-- qwen3:8b has the best performance of the three, in terms of experimentation so far.
-- Check out some other [integration packages](https://docs.langchain.com/oss/python/integrations/providers/overview).
-- Everything that the agent does happens in a sandbox (the "data" directory).
-- BFS and DFS strategies support approximate searches as well as exact searches for file and directory names.
-- Look out for the logs of your conversations in the logs directory.
-- Check out the configs directory. This contains all the primary configurations of the agent.
-- Check out the prompts directory. This contains pre-defined prompts for the agent.
-- By default the short term memory agent is run if you run the main.py file.
-- For verbose flag update might break argument parsing behaviour. Use `--verbose true` for now.
-- The new short term memory capability has been integrated with the UI.
-
-## User Interface (UI)
-
-#### Run the UI
-
-```
+```bash
+# Standard launch
 uv run ui.py
-```
 
-#### Run the UI (with reload)
-
-```
+# Development mode with auto-reload
 gradio ui.py
 ```
 
-#### Have a look at the Agentic File Explorer UI
+![Agentic File Explorer UI](images/agentic_file_explorer_ui.png)
 
-![Agentic File Explorer UI Image](images/agentic_file_explorer_ui.png)
+## Project Structure
 
-## Unit Testing
+- **`data/`** - Sandboxed workspace for all file operations
+- **`logs/`** - Conversation logs and system logs
+- **`configs/`** - Agent configuration files
+- **`prompts/`** - Pre-defined prompt templates
+- **`tests/`** - Unit tests
 
-```
+## Testing
+
+Run the test suite:
+
+```bash
 uv run python -m unittest discover -s tests
 ```
 
-## Auxiliary (probably not needed)
+## Recommended Models
 
-#### Capture Dependencies
+The following Ollama models work well with this project:
 
-```
+- **`qwen3:8b`** (recommended) - Best performance in testing
+- `llama3.1` - Strong general performance
+- `phi3.5` - Lightweight alternative
+
+Browse more models at [Ollama Library](https://ollama.com/library).
+
+## Resources
+
+- [LangChain Documentation](https://docs.langchain.com/)
+- [Gradio Documentation](https://www.gradio.app/docs)
+- [Ollama Documentation](https://ollama.com/)
+- [UV Package Manager](https://docs.astral.sh/uv/)
+
+## Notes
+
+- All file operations are sandboxed within the `data/` directory
+- Search tools support both exact and approximate matching
+- Conversation logs are automatically saved to the `logs/` directory
+- Short-term memory is enabled by default for contextual conversations
+- The `--verbose true` syntax is required for the verbose flag due to parsing behavior
+
+## Development
+
+### Capture Dependencies
+
+```bash
 uv lock
 ```
 
-#### Create Virtual Environment
+### Manual Virtual Environment Setup
 
-```
-uv venv --python /home/andi/.local/bin/python3.12
-```
+```bash
+# Create environment
+uv venv --python /path/to/python3.12
 
-#### Activate Virtual Environment
-
-```
+# Activate
 source .venv/bin/activate
-```
 
-#### Run scripts
-
-```
-uv run <file name>.py
-```
-
-#### Deactivate Virtual Environment
-
-```
+# Deactivate when done
 deactivate
 ```
