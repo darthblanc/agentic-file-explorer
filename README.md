@@ -21,38 +21,30 @@ Install [Ollama](https://ollama.com/download/linux) to run LLMs locally.
 
 ## Quick Start
 
-1. **Pull the recommended model:**
+**1. Install [Ollama](https://ollama.com/download/linux) and pull the recommended model:**
 
-   ```bash
-   ollama pull qwen3:8b
-   ```
+```bash
+ollama pull qwen3:8b
+```
 
-2. **Install UV package manager:**
+**2. Install the [uv](https://docs.astral.sh/uv/) package manager:**
 
-   ```bash
-   # Using curl
-   curl -LsSf https://astral.sh/uv/install.sh | sh
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
 
-   # Or using wget
-   wget -qO- https://astral.sh/uv/install.sh | sh
-   ```
+**3. Set up and run:**
 
-3. **Set up the environment:**
+```bash
+uv sync
+uv run main.py
+```
 
-   ```bash
-   uv sync
-   ```
+**4. (Optional) Launch the Gradio UI:**
 
-4. **Run the agent:**
-
-   ```bash
-   uv run main.py
-   ```
-
-5. **Launch the UI (optional):**
-   ```bash
-   uv run ui.py
-   ```
+```bash
+uv run ui.py
+```
 
 ## Available Tools
 
@@ -86,7 +78,7 @@ Search tools support both exact matching and approximate (fuzzy) matching using 
 ### Usage Examples
 
 ```bash
-# Change model
+# Examples
 uv run main.py --model llama3.1
 
 # Enable verbose logging
@@ -177,8 +169,6 @@ agentic-file-explorer/
 ```
 
 ## Testing
-
-Run the test suite:
 
 ```bash
 uv run python -m unittest discover -s tests
