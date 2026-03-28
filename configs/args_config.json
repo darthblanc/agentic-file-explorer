@@ -3,7 +3,7 @@
     "arguments":  {
         "--model" : {
             "type": "str",
-            "default": "qwen3:8b",
+            "default": "qwen3:4b",
             "help": "The LLM model that would be used for the task."
         },
         "--temperature" : {
@@ -26,6 +26,16 @@
             "type": "bool",
             "default": true,
             "help": "Enable short-term memory."
+        },
+        "--allow-clear-txt": {
+            "type": "bool",
+            "default": false,
+            "help": "Allow the agent to use the clear_txt tool to erase file contents."
+        },
+        "--think": {
+            "type": "bool",
+            "default": false,
+            "help": "Enable extended thinking for the orchestrator model."
         }
     }
 }
