@@ -34,12 +34,11 @@ clear_txt = StructuredTool.from_function(
     description=TXT_TOOL_DESCRIPTIONS["clear"],
 )
 
-txt_tools = [
-    read_txt,
-    write_to_txt,
-    append_to_txt,
-    # clear_txt,
-]
+def get_txt_tools(allow_clear: bool = False) -> list:
+    tools = [read_txt, write_to_txt, append_to_txt]
+    if allow_clear:
+        tools.append(clear_txt)
+    return tools
 
 # Provide a simple alias `clear` so existing tests that import `clear` continue to work
 clear = clear_txt
