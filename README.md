@@ -151,7 +151,7 @@ uv run python ui.py
 uv run python main.py
 ```
 
-![Agentic File Explorer UI](images/agentic_file_explorer_ui.png)
+![Agentic File Explorer UI](demo.gif)
 
 ### Gradio UI
 
