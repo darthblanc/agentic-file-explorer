@@ -1,6 +1,6 @@
 {
     "model" : {
-        "default": "qwen3:8b",
+        "default": "qwen3:4b",
         "help": "The LLM model that would be used for the task."
     },
     "temperature" : {
@@ -18,5 +18,13 @@
     "stm": {
         "default": true,
         "help": "Enable short-term memory."
+    },
+    "allow_clear_txt": {
+        "default": false,
+        "help": "Allow the agent to use the clear_txt tool to erase file contents."
+    },
+    "think": {
+        "default": false,
+        "help": "Enable extended thinking for the orchestrator model."
     }
 }
