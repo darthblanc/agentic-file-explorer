@@ -1,14 +1,22 @@
 {
+    "SUB_AGENT_MODEL": {
+        "MODEL_NAME": "qwen3:4b",
+        "TEMPERATURE": 0,
+        "THINK": false
+    },
     "CSVTools": {
-        "description": "Tools for handling CSV files, including reading, writing, and manipulating CSV data.",
+        "description": "Agent for handling CSV files. Pass a single structured query string. Required format: '<operation> <path>' or '<operation> <path> with content: <content>'. Operations: read, write, append, get_headers. Examples: 'read data/sales.csv', 'append data/sales.csv with content: [{\"name\": \"Alice\", \"score\": 90}]', 'get_headers data/sales.csv'. Only .csv files are accepted.",
+        "system_prompt_file": "prompts/system_prompts/csv_agent_prompt.md",
         "functions": {
-            "read": "Read the contents of a csv file specified by a path.",
+            "read": "Read the contents of a csv file specified by a path. Optionally set n_rows (int) to limit the number of data rows returned; combine with from_end=true to get the last n rows instead of the first. Optionally set columns (list of strings) to return only the specified column headers.",
             "write": "Write new content to a csv file specified by a path. Content should be formatted similar to [{\"col_a\": \"val_a\"}, {\"col_b\": \"val_b\"}] where \"col_a\" and \"col_b\" are column names and in the column_names parameter. This tool will overwrite the previous content of the csv file.",
-            "append": "Append new content to a csv file specified by a path. Content should be formatted similar to [{\"col_a\": \"val_a\"}, {\"col_b\": \"val_b\"}] where \"col_a\" and \"col_b\" are column names and in the column_names parameter."
+            "append": "Append new content to a csv file specified by a path. Content should be formatted similar to [{\"col_a\": \"val_a\"}, {\"col_b\": \"val_b\"}] where \"col_a\" and \"col_b\" are column names and in the column_names parameter.",
+            "get_headers": "Return the column headers of a csv file specified by a path. Use this before reading or writing to verify exact column names and resolve any spelling ambiguity."
         }
     },
     "TXTTools": {
-        "description": "Tools for handling text files, including reading, writing, and searching text files.",
+        "description": "Agent for handling text files. Pass a single structured query string. Required format: '<operation> <path>' or '<operation> <path> with content: <content>'. Operations: read, write, append, clear. Examples: 'read notes.txt', 'write report.txt with content: quarterly results here', 'append log.txt with content: new entry', 'clear scratch.txt'. Only .txt files are accepted. Always provide the full path.",
+        "system_prompt_file": "prompts/system_prompts/txt_agent_prompt.md",
         "functions": {
             "read": "Read the contents of a txt file specified by a path.",
             "write": "Write new content to a txt file specified by a path. This tool will overwrite the previous content of the txt file.",
@@ -24,14 +32,16 @@
         }
     },
     "DirectoryTools": {
-        "description": "Tools for managing directories, including creating, deleting, and listing directory contents.",
+        "description": "Agent for managing directories. Pass a single structured query string. Required format: '<operation> <path>'. Operations: list, create directory. Examples: 'list data/reports', 'create directory data/archive'. Always provide the full directory path.",
+        "system_prompt_file": "prompts/system_prompts/directory_agent_prompt.md",
         "functions": {
             "get_directory_content": "Get the contents of a directory specified by a path.",
             "create_directory": "Create a new directory specified by a path."
         }
     },
     "TraversalTools": {
-        "description": "Tools for traversing file systems, including navigating through directories and finding files.",
+        "description": "Agent for searching the file system. Pass a single structured query string. Required format: 'find <name> in <directory> using <dfs|bfs> [approximate]'. Use 'approximate' when the name may be misspelled or partially known. Examples: 'find report.txt in . using dfs', 'find logs in data using bfs', 'find reprot.txt in . using dfs approximate'. Always specify the directory (use '.' for current).",
+        "system_prompt_file": "prompts/system_prompts/traversal_agent_prompt.md",
         "functions": {
             "depth_first_search": "Performs a depth-first search (DFS) through the filesystem. The path(s) to matching file(s) or directories, or an informative message if not found.",
             "breadth_first_search": "Performs a breadth-first search (BFS) through the filesystem. The path(s) to matching file(s) or directories, or an informative message if not found."
