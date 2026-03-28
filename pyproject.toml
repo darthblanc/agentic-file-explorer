@@ -9,4 +9,8 @@ dependencies = [
     "langchain>=1.0.2",
     "langchain-ollama>=1.0.0",
     "langchain-openai>=1.0.1",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.20.0",
+    "httpx>=0.24.0",
+    "mcp[cli]>=1.0.0",
 ]
