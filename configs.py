@@ -25,6 +25,7 @@ ASSISTANT_PROMPT_FILE = STM_CONFIG["ASSISTANT_PROMPT_FILE"]
 ASSISTANT_PROMPT = open(ASSISTANT_PROMPT_FILE, "r").read()
 
 TOOL_CONFIGS = json.load(open("configs/tool_config.json"))
+SUB_AGENT_MODEL_CONFIG = TOOL_CONFIGS["SUB_AGENT_MODEL"]
 TXT_TOOL_DESCRIPTIONS = TOOL_CONFIGS["TXTTools"]["functions"]
 TXT_TOOL_READ_ARGS = TOOL_CONFIGS["TXTTools"]["read_args"]
 TXT_TOOL_WRITE_ARGS = TOOL_CONFIGS["TXTTools"]["write_args"]
@@ -32,3 +33,8 @@ SEARCH_ARGS = TOOL_CONFIGS["TraversalTools"]["search_args"]
 FUNCTION_DESCRIPTION = TOOL_CONFIGS["TraversalTools"]["functions"]
 CSV_TOOL_DESCRIPTIONS = TOOL_CONFIGS["CSVTools"]["functions"]
 DIRECTORY_TOOL_DESCRIPTIONS = TOOL_CONFIGS["DirectoryTools"]["functions"]
+
+TXT_AGENT_PROMPT = open(TOOL_CONFIGS["TXTTools"]["system_prompt_file"], "r").read()
+CSV_AGENT_PROMPT = open(TOOL_CONFIGS["CSVTools"]["system_prompt_file"], "r").read()
+DIRECTORY_AGENT_PROMPT = open(TOOL_CONFIGS["DirectoryTools"]["system_prompt_file"], "r").read()
+TRAVERSAL_AGENT_PROMPT = open(TOOL_CONFIGS["TraversalTools"]["system_prompt_file"], "r").read()
