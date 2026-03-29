@@ -211,3 +211,5 @@ __marimo__/
 data
 test
 logs
+
+*.sh

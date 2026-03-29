@@ -1,6 +1,6 @@
 {
     "SUB_AGENT_MODEL": {
-        "MODEL_NAME": "qwen3:4b",
+        "MODEL_NAME": "qwen2.5:3b",
         "TEMPERATURE": 0,
         "THINK": false
     },

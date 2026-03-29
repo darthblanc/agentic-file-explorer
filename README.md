@@ -47,7 +47,7 @@ hierarchical_agent_tools.py  ← creates sub-agents, exposes them as tools
 └── traversal_agent      ← sub-agent with traversal_tools (BFS / DFS)
 ```
 
-Sub-agents run on a **dedicated model** (`qwen3:4b`, thinking disabled) configured independently of the orchestrator in `configs/tool_config.json` under `SUB_AGENT_MODEL`. Swapping the orchestrator model via `--model` does not affect sub-agent speed.
+Sub-agents run on a **dedicated model** (`qwen2.5:3b`, thinking disabled) configured independently of the orchestrator in `configs/tool_config.json` under `SUB_AGENT_MODEL`. Swapping the orchestrator model via `--model` does not affect sub-agent speed.
 
 Each sub-agent has its own **narrow system prompt** (`prompts/system_prompts/<agent>_prompt.md`) that:
 - Restricts the agent to its own file type (e.g. the txt agent refuses `.csv` requests)
@@ -127,6 +127,7 @@ Two independent wins: the 4B model fits fully in VRAM (4× faster token generati
 
 ```bash
 ollama pull qwen3:4b
+ollama pull qwen2.5:3b
 ```
 
 **2. Install the [uv](https://docs.astral.sh/uv/) package manager:**
@@ -291,7 +292,8 @@ uv run main.py --model qwen3:8b --think true --username alice --verbose true
 
 | Model | Notes |
 |-------|-------|
-| `qwen3:4b` ✅ | Default. Fastest end-to-end — fits fully in VRAM, thinking off |
+| `qwen3:4b` ✅ | Default orchestrator. Fits fully in VRAM, thinking off |
+| `qwen2.5:3b` | Default sub-agent model. Fast tool-calling, lower memory footprint |
 | `qwen3:8b` | Higher accuracy on complex tasks; use if 4b misses tool calls |
 | `llama3.1` | Strong general performance; also used as default summarization model |
 | `phi3.5` | Lightweight alternative for lower-resource machines |
@@ -301,9 +303,10 @@ The agent is model-agnostic — any Ollama-compatible model can be swapped in vi
 **Choosing the right model size:** Run `ollama ps` while the agent is active to see how the current model is split across GPU and CPU:
 
 ```
-NAME          ID      SIZE    PROCESSOR    UNTIL
-qwen3:4b      ...     3.0 GB  100% GPU     ...
-qwen3:8b      ...     6.2 GB  46%/54% CPU  ...
+NAME            ID      SIZE    PROCESSOR    UNTIL
+qwen3:4b        ...     3.0 GB  100% GPU     ...
+qwen2.5:3b      ...     2.0 GB  100% GPU     ...
+qwen3:8b        ...     6.2 GB  46%/54% CPU  ...
 ```
 
 If the model is running partly on CPU (`XX% CPU`), generation will be slower. A model that fits entirely in VRAM (`100% GPU`) is significantly faster. Use this to decide whether to step up or down in model size for your hardware.
