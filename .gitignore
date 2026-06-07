@@ -213,3 +213,4 @@ test
 logs
 
 *.sh
+.claude
