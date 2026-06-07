@@ -2,9 +2,9 @@
 
 A locally-running AI agent that navigates, reads, writes, searches, and reasons over a file system through natural language — built on a **ReAct agent loop**, **hierarchical agent architecture**, **short-term memory**, and **automatic context compaction**.
 
-**What this demonstrates:** an agent harness that solves three problems that surface when you run agents on small local models — tool-selection accuracy degrading as the tool list grows (fixed with hierarchical sub-agents), hard context-window limits (fixed with short-term memory + file references instead of content injection), and recovering from destructive file operations (fixed with git-backed rollback). The headline result: **12× faster — 2 minutes down to under 10 seconds** — by fitting a 4B model fully in VRAM and disabling chain-of-thought (`ollama ps` evidence in [Design Decisions](#design-decisions)).
+**What this demonstrates:** an agent harness that solves three problems that surface when you run agents on small local models — tool-selection accuracy degrading as the tool list grows (fixed with hierarchical sub-agents), hard context-window limits (fixed with short-term memory + file references instead of content injection), and destructive, hard-to-undo file operations (recovered via git-backed rollback). The headline result: **12× faster — 2 minutes down to under 10 seconds** — by fitting a 4B model fully in VRAM and disabling chain-of-thought (`ollama ps` evidence in [Design Decisions](#design-decisions)).
 
-Structurally similar to document processing pipelines used in production legal and enterprise AI systems — running entirely on-device with no API keys required.
+Runs entirely on-device — no API keys required.
 
 > **Stack:** LangChain · Ollama · Gradio · FastAPI · Python · uv
 
@@ -16,7 +16,7 @@ Structurally similar to document processing pipelines used in production legal a
 
 The agent runs a [ReAct (Reason + Act) loop](https://docs.langchain.com/oss/python/langchain/agents#example-of-react-loop) — at each turn it reasons about what needs to be done, selects the appropriate tool, observes the result, and decides whether to act again or respond. This lets it handle multi-step tasks like:
 
-> *"Find all CSV files in the project folder, read the one that mentions sales, and summarize the top 3 rows"*
+> *"Find all CSV files in the data folder, read the one that mentions sales, and summarize the top 3 rows"*
 
 without the user having to decompose the task manually.
 
@@ -35,7 +35,7 @@ Running agents on smaller local models introduces a hard constraint: limited con
 
 This prevents context pollution, eliminates cross-turn file confusion, and avoids OOM errors from accumulating file contents in long sessions. It also makes agent behavior more auditable: tool calls are the only path to file data, so you can always see exactly what the agent accessed and when.
 
-*Context management approach informed by the taxonomy in [Context Engineering 2.0](https://arxiv.org/abs/2510.26493) (Hua et al., 2025).*
+*Both mechanisms above — STM's compaction/summarization and the file-reference design — are informed by the taxonomy in [Context Engineering 2.0](https://arxiv.org/abs/2510.26493) (Hua et al., 2025).*
 
 ### Tool Architecture
 
@@ -65,7 +65,7 @@ action=sub_agent_query  | req=a3f2c1d0 | agent=txt_file_agent query='read cosmic
 action=sub_agent_response | req=a3f2c1d0 | agent=txt_file_agent response='galactus is...'
 ```
 
-Rollback is intentionally excluded from the agent's tool surface — it is user-controlled only (see [UI](#gradio-ui)).
+Rollback is deliberately kept out of the agent's tool surface — see [Available Tools](#available-tools) for where it lives and [Design Decisions](#design-decisions) for why.
 
 Each domain also has a separate **functions layer** (pure logic) and a **tools layer** (LangChain wrappers) — keeping the agent core decoupled from file I/O implementation. Adding support for a new file type means adding one functions file, one tools file, one sub-agent prompt, and one sub-agent entry; the top-level agent is untouched.
 
@@ -103,7 +103,7 @@ Both support exact and approximate (fuzzy) matching using a 0.8 similarity thres
 `qwen3:4b` (≈2.6 GB) fits entirely in VRAM → 100% GPU inference. `qwen3:8b` (≈5.2 GB) exceeds VRAM and spills to CPU, cutting generation speed to ~¼. Run `ollama ps` while the agent is active to see how your hardware handles each model.
 </details>
 
-Two independent wins: the 4B model fits fully in VRAM (4× faster token generation), and disabling thinking eliminates chain-of-thought tokens (10× fewer tokens generated). Combined, that's 2 minutes → under 10 seconds on the same task.
+Two independent wins stack here: fitting fully in VRAM (4× faster token generation, comparing the thinking-off rows) and disabling thinking (10× fewer tokens generated, comparing `qwen3:4b` with thinking on vs. off). They don't compose into a clean 40× — each multiplier isolates one variable against a different baseline row in the table — but together they account for the measured 12× end-to-end speedup (2m6s → 9.8s).
 
 `qwen3:4b` is the default and the recommended starting point — if you find a larger model gives meaningfully better results on your tasks, use it via `--model`. Tool-selection accuracy still benefits more from instruction-following quality than raw parameter count.
 
@@ -115,11 +115,11 @@ Two independent wins: the 4B model fits fully in VRAM (4× faster token generati
 
 **Why git-backed rollback?** File write and append operations are destructive and irreversible by default. Rather than storing in-memory snapshots (lost on restart) or blocking the agent on each commit, `data/` maintains its own isolated git repository. A background thread commits every file mutation asynchronously — the agent returns its response immediately while the commit races ahead in the background. By the time the user reads the output and sends the next message, the commit is done. Rollback calls `git revert` (last change) or `git reset --hard` (all changes), keeping the agent in full control of its own history without touching the project repository.
 
-**Why file references?** Early testing showed that injecting raw file contents into the system prompt caused the model to hallucinate edits and confuse files across turns. Beyond that, accumulating file contents in memory across a long session is an OOM risk — especially with larger files. The `File` model stores only metadata (path, size, MIME type); `get_content()` reads from disk on demand. Replacing contents with lightweight references keeps both context and memory lean, and forces tool calls to be the only path to file data — making agent behavior more predictable and auditable. Approach informed by [Context Engineering 2.0](https://arxiv.org/abs/2510.26493) (Hua et al., 2025).
+**Why file references?** Early testing showed that injecting raw file contents into the system prompt caused the model to hallucinate edits and confuse files across turns. Beyond that, accumulating file contents in memory across a long session is an OOM risk — especially with larger files. The `File` model stores only metadata (path, size, MIME type); `get_content()` reads from disk on demand. Replacing contents with lightweight references keeps both context and memory lean, and forces tool calls to be the only path to file data — making agent behavior more predictable and auditable.
 
 **Why BFS and DFS as separate tools?** Giving the agent both strategies and letting it choose based on task context — rather than always running one — improves search efficiency and mirrors how a human would approach the problem. Shallow search for obvious files, deep search when you expect nesting.
 
-**Why SSE for remote mode?** The agent's `stream()` is already a generator that yields tokens one at a time — Server-Sent Events maps directly onto that with almost no adaptation. The client receives a readable token stream and file contents are never serialized into any response body. A background git-commit thread per directory prevents lock-file races when multiple operations target the same repo concurrently.
+**Why SSE for remote mode?** The agent's `stream()` is already a generator that yields tokens one at a time — Server-Sent Events maps directly onto that with almost no adaptation, giving the client a readable token stream with no extra serialization layer.
 
 ---
 
@@ -234,7 +234,7 @@ receives: token stream only     ←     agent + Ollama (on-machine)
 | `POST /new-chat` | Reset the session (clear short-term memory). |
 | `POST /inject` | Inject a notice into the agent's context (used by rollback). |
 
-Every request to the server is recorded in `logs/audit.log` with a timestamp, the endpoint called, the caller's IP, and the full message or notice content. Sub-agent queries and responses are also written to `audit.log` with a shared request ID (`req=`) so each query/response pair can be correlated.
+Every request to the server — and every sub-agent query/response pair (see [Tool Architecture](#tool-architecture)) — is recorded in `logs/audit.log` with a timestamp, the endpoint called, the caller's IP, and the full message or notice content.
 
 ---
 
@@ -251,6 +251,7 @@ Every request to the server is recorded in `logs/audit.log` with a timestamp, th
 | **Create Directory** | Create new directories | — |
 | **BFS Search** | Breadth-first file system search | Files & dirs |
 | **DFS Search** | Depth-first file system search | Files & dirs |
+
 All operations are sandboxed within the `data/` directory. The `clear` tool is disabled by default and must be enabled with `--allow-clear-txt true` (CLI) or by setting `allow_clear_txt.default` to `true` in `configs/ui_configs.json` (UI).
 
 Rollback operations (undo last change, undo all changes, view history) are available in the Gradio UI's **File Changes** panel and are not exposed to the agent as tools.
