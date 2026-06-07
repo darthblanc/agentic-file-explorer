@@ -1,15 +1,9 @@
 from langchain_text_splitters import TokenTextSplitter
-from typing import Dict, List, Tuple
+from typing import List, Tuple
 from langchain.messages import HumanMessage, SystemMessage, AIMessage, AnyMessage
 from core.stm_loader import load_summarization_agent
 from core.configs import CONTEXT_SIZING, SUMMARIZATION_MODEL, BASE_SYSTEM_PROMPT, REFERENCE_INSTRUCTIONS, ASSISTANT_PROMPT
 from core.file_dictionary import file_dict
-
-def count_context_tokens(messages: List[Dict[str, str]]):
-    text = ""
-    for message_dict in messages:
-        text += message_dict["content"] + "\n"
-    return len(text_splitter.split_text(text))
 
 def count_tokens(text: str):
     return len(text_splitter.split_text(text))
