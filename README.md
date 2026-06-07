@@ -2,6 +2,8 @@
 
 A locally-running AI agent that navigates, reads, writes, searches, and reasons over a file system through natural language — built on a **ReAct agent loop**, **hierarchical agent architecture**, **short-term memory**, and **automatic context compaction**.
 
+**What this demonstrates:** an agent harness that solves three problems that surface when you run agents on small local models — tool-selection accuracy degrading as the tool list grows (fixed with hierarchical sub-agents), hard context-window limits (fixed with short-term memory + file references instead of content injection), and recovering from destructive file operations (fixed with git-backed rollback). The headline result: **12× faster — 2 minutes down to under 10 seconds** — by fitting a 4B model fully in VRAM and disabling chain-of-thought (`ollama ps` evidence in [Design Decisions](#design-decisions)).
+
 Structurally similar to document processing pipelines used in production legal and enterprise AI systems — running entirely on-device with no API keys required.
 
 > **Stack:** LangChain · Ollama · Gradio · FastAPI · Python · uv
@@ -80,7 +82,7 @@ Both support exact and approximate (fuzzy) matching using a 0.8 similarity thres
 
 ## Design Decisions
 
-**Why Qwen3:4b with thinking disabled?** Benchmarking the same task across configurations:
+**Why Qwen3:4b with thinking disabled?** This project runs two models in different roles: `qwen3:4b` as the top-level orchestrator, and `qwen2.5:3b` for sub-agents (see [Tool Architecture](#tool-architecture)) — the orchestrator does the heavier multi-step reasoning, so it benefits most from a model that's both fast and fully resident in VRAM. Here's the benchmarking that led to `qwen3:4b` with thinking disabled for that role:
 
 | Config | Generation | Tokens | Total time |
 |--------|-----------|--------|------------|
