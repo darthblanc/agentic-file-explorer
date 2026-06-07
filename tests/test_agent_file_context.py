@@ -3,8 +3,8 @@ import shutil
 import tempfile
 import unittest
 
-from file import File
-from file_dictionary import FileDictionary
+from core.file import File
+from core.file_dictionary import FileDictionary
 
 
 class TestAgentFileContext(unittest.TestCase):

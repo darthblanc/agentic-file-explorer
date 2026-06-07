@@ -1,4 +1,4 @@
-from file import File
+from core.file import File
 from typing import List
 
 class FileDictionary():

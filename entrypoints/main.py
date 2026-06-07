@@ -1,12 +1,12 @@
 import os
 os.environ.setdefault("DATA_DIR", "data")
 
-from arguments import parser
+from core.arguments import parser
 
 
 def _run_remote(args):
     """Simple CLI loop that streams tokens from the remote agent server."""
-    from remote_agent import agent_for_ui, reset_session_stm
+    from agents.remote_agent import agent_for_ui, reset_session_stm
     username = args.username if hasattr(args, "username") else "user"
     print("Remote mode — connected to", os.environ.get("AGENT_SERVER_URL", "http://localhost:8000"))
     while True:
@@ -25,13 +25,13 @@ def _run_remote(args):
 
 
 def _run_local(args):
-    from configs import SANDBOX_DIR
+    from core.configs import SANDBOX_DIR
     os.environ.setdefault("DATA_DIR", SANDBOX_DIR)
 
     from langchain_ollama import ChatOllama
     from langchain.agents import create_agent
-    from hierarchical_agent_tools import create_hierarchical_tools
-    from chat_meta import ChatMeta
+    from tools.hierarchical_agent_tools import create_hierarchical_tools
+    from core.chat_meta import ChatMeta
 
     chat_meta = ChatMeta(
         model_name=args.model,
@@ -47,11 +47,11 @@ def _run_local(args):
     )
 
     if chat_meta.stm:
-        from stm_context_agent import main as stm_main
+        from agents.stm_context_agent import main as stm_main
         print("Using short-term memory context agent.")
         stm_main(agent, chat_meta)
     else:
-        from no_context_agent import main as no_stm_main
+        from agents.no_context_agent import main as no_stm_main
         print("Using no short-term memory context agent.")
         no_stm_main(agent, chat_meta)
 

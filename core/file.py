@@ -1,6 +1,6 @@
 import os
 from pydantic import BaseModel, Field
-from setup_directory import construct_file_path
+from core.setup_directory import construct_file_path
 
 class File(BaseModel):
     id: str = Field(..., description="Reference ID of the file within the agent's context window (currently the path)")

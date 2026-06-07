@@ -2,11 +2,11 @@ import os
 import gradio as gr
 
 if os.environ.get("REMOTE_MODE"):
-    from remote_agent import agent_for_ui, reset_session_stm, inject_notice
+    from agents.remote_agent import agent_for_ui, reset_session_stm, inject_notice
 else:
-    from agent import agent_for_ui, reset_session_stm, inject_notice
+    from agents.agent import agent_for_ui, reset_session_stm, inject_notice
 
-from rollback import rollback_last_change, rollback_all_changes, get_commits, get_commit_stat, get_file_diff
+from core.rollback import rollback_last_change, rollback_all_changes, get_commits, get_commit_stat, get_file_diff
 
 def render_diff(diff_text: str) -> str:
     if not diff_text.strip():

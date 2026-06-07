@@ -1,4 +1,4 @@
-import chat_meta
+from core import chat_meta
 from langchain.messages import HumanMessage
 
 def main(agent, chat_meta: chat_meta.ChatMeta):

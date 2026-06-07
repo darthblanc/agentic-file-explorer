@@ -1,5 +1,5 @@
 from langchain.tools import Tool
-from rollback import rollback_last_change, rollback_all_changes, list_changes
+from core.rollback import rollback_last_change, rollback_all_changes, list_changes
 
 rollback_tools = [
     Tool(

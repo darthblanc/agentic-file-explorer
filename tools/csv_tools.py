@@ -1,6 +1,6 @@
-from configs import CSV_TOOL_DESCRIPTIONS
+from core.configs import CSV_TOOL_DESCRIPTIONS
 from langchain_core.tools import StructuredTool
-from csv_functions import read, write, append, get_headers
+from functions.csv_functions import read, write, append, get_headers
 
 read_csv = StructuredTool.from_function(
     func=read,

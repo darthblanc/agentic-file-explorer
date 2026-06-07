@@ -1,9 +1,9 @@
 import os
 from collections import deque
-from compare import compare
-from setup_directory import construct_directory_path_limited
+from core.compare import compare
+from core.setup_directory import construct_directory_path_limited
 from typing import List, Set, Deque, Dict
-from string_functions import strip_base_directory
+from core.string_functions import strip_base_directory
 
 class SearchObject:
     def __init__(self, processor_array: List[str] | Deque[str], results: Dict[str, List[str]], visited: Set[str], directory: str, target: str, targeted_search: bool, approximate_search: bool) -> None:

@@ -2,7 +2,7 @@ import unittest
 import os
 import shutil
 import tempfile
-from file import File
+from core.file import File
 
 
 class TestFileModel(unittest.TestCase):

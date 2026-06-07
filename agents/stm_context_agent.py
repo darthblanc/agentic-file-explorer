@@ -1,7 +1,7 @@
-import chat_meta
+from core import chat_meta
 from langchain.messages import AIMessage, HumanMessage
-from stm import ShortTermMemory, MessageContext
-from logger import log_conversation
+from core.stm import ShortTermMemory, MessageContext
+from core.logger import log_conversation
 
 def main(agent, chat_meta: chat_meta.ChatMeta):
     stm = ShortTermMemory(message_contexts=MessageContext(messages=[]), token_count=0)

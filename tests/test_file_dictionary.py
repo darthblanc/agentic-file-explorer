@@ -3,8 +3,8 @@ import shutil
 import unittest
 import tempfile
 
-from file import File
-from file_dictionary import FileDictionary, file_dict
+from core.file import File
+from core.file_dictionary import FileDictionary, file_dict
 
 
 class TestFileDictionary(unittest.TestCase):

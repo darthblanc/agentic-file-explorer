@@ -9,8 +9,8 @@ Run with:
 from fastapi import FastAPI, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from agent import agent_for_ui, reset_session_stm, inject_notice
-from logger import audit_log, new_request_id
+from agents.agent import agent_for_ui, reset_session_stm, inject_notice
+from core.logger import audit_log, new_request_id
 
 app = FastAPI(title="Agentic File Explorer")
 

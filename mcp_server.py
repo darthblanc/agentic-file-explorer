@@ -10,15 +10,15 @@ Or install into Claude Desktop's config:
 """
 import os
 from mcp.server.fastmcp import FastMCP
-from txt_functions import read as _txt_read, write as _txt_write, append as _txt_append
-from csv_functions import (
+from functions.txt_functions import read as _txt_read, write as _txt_write, append as _txt_append
+from functions.csv_functions import (
     read as _csv_read,
     write as _csv_write,
     append as _csv_append,
     get_headers as _csv_headers,
 )
-from directory_functions import get_content as _dir_list, create as _dir_create
-from traversal_functions import breadth_first_search, depth_first_search
+from functions.directory_functions import get_content as _dir_list, create as _dir_create
+from functions.traversal_functions import breadth_first_search, depth_first_search
 
 _DATA_DIR = os.environ.get("DATA_DIR", "data")
 

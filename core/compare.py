@@ -1,6 +1,6 @@
 from difflib import SequenceMatcher
 from typing import Dict, List
-from string_functions import strip_base_directory
+from core.string_functions import strip_base_directory
 
 def isEqual(target: str, candidate: str) -> bool:
     return target == candidate

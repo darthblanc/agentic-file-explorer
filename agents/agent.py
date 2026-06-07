@@ -1,15 +1,15 @@
-from configs import SANDBOX_DIR
+from core.configs import SANDBOX_DIR
 import os
 os.environ.setdefault("DATA_DIR", SANDBOX_DIR)
 
-from chat_meta import ChatMeta
+from core.chat_meta import ChatMeta
 from langchain_ollama import ChatOllama
 from langchain.agents import create_agent
-from hierarchical_agent_tools import create_hierarchical_tools
-from stm_context_agent import stream as stm_stream
-from stm import ShortTermMemory, MessageContext
+from tools.hierarchical_agent_tools import create_hierarchical_tools
+from agents.stm_context_agent import stream as stm_stream
+from core.stm import ShortTermMemory, MessageContext
 from langchain_core.messages import HumanMessage
-from configs import UI_CONFIGS
+from core.configs import UI_CONFIGS
 
 chat_meta = ChatMeta(
         model_name=UI_CONFIGS["model"]["default"],

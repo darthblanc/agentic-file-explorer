@@ -4,7 +4,7 @@ DATA_DIR = os.environ["DATA_DIR"]
 
 import shutil
 import unittest
-from setup_directory import construct_file_path, construct_directory_path
+from core.setup_directory import construct_file_path, construct_directory_path
 
 class TestDirectoryFunctions(unittest.TestCase):
     def setUp(self):

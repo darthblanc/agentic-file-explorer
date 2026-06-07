@@ -4,7 +4,7 @@ DATA_DIR = os.environ["DATA_DIR"]
 
 import shutil
 import unittest
-from directory_tools import create_directory, get_directory_content
+from tools.directory_tools import create_directory, get_directory_content
 
 class TestFileTools(unittest.TestCase):
     def setUp(self):

@@ -148,10 +148,10 @@ uv sync
 
 ```bash
 # Gradio web UI (local)
-uv run python ui.py
+uv run python -m entrypoints.ui
 
 # CLI (local)
-uv run python main.py
+uv run python -m entrypoints.main
 ```
 
 ![Agentic File Explorer UI](demo.gif)
@@ -182,27 +182,27 @@ The agent can run on a separate server while the UI or CLI runs on any machine. 
 
 ```bash
 # On the machine where the files live (Ollama must be running here)
-uv run uvicorn server:app --host 0.0.0.0 --port 8000
+uv run uvicorn entrypoints.server:app --host 0.0.0.0 --port 8000
 ```
 
 ### Connecting a client
 
 ```bash
 # Gradio UI — remote
-REMOTE_MODE=1 AGENT_SERVER_URL=http://<server-ip>:8000 uv run python ui.py
+REMOTE_MODE=1 AGENT_SERVER_URL=http://<server-ip>:8000 uv run python -m entrypoints.ui
 
 # CLI — remote
-REMOTE_MODE=1 AGENT_SERVER_URL=http://<server-ip>:8000 uv run python main.py
+REMOTE_MODE=1 AGENT_SERVER_URL=http://<server-ip>:8000 uv run python -m entrypoints.main
 ```
 
 `AGENT_SERVER_URL` defaults to `http://localhost:8000`, so for local testing you can omit it:
 
 ```bash
 # Terminal 1
-uv run uvicorn server:app --port 8000
+uv run uvicorn entrypoints.server:app --port 8000
 
 # Terminal 2
-REMOTE_MODE=1 uv run python ui.py
+REMOTE_MODE=1 uv run python -m entrypoints.ui
 ```
 
 In remote CLI mode, type `/new` or `/reset` to start a fresh session.
@@ -317,42 +317,52 @@ If the model is running partly on CPU (`XX% CPU`), generation will be slower. A 
 
 ## Project Structure
 
+Source is grouped into packages by architectural layer — entrypoints depend on agents, agents depend on tools, tools depend on functions and core, and core is the shared base used throughout:
+
 ```
 agentic-file-explorer/
-├── main.py                   # CLI entry point — local or remote mode via REMOTE_MODE
-├── ui.py                     # Gradio web UI — local or remote mode via REMOTE_MODE
-├── server.py                 # FastAPI server: SSE /chat, /new-chat, /inject
-├── remote_agent.py           # HTTP client mirroring the agent.py interface
+├── entrypoints/              # "How to run this" — one file per mode
+│   ├── main.py               #   CLI entry point — local or remote mode via REMOTE_MODE
+│   ├── ui.py                 #   Gradio web UI — local or remote mode via REMOTE_MODE
+│   └── server.py             #   FastAPI server: SSE /chat, /new-chat, /inject
 ├── mcp_server.py             # MCP server exposing file tools to Claude Desktop etc.
-├── agent.py                  # Agent wrapper for local UI/server streaming
-├── stm_context_agent.py      # Main agent: STM + context compaction + streaming
-├── no_context_agent.py       # Lightweight stateless agent (no memory)
+│                             #   (kept at root — the `mcp` CLI loads it by file path and
+│                             #   resolves its sibling packages relative to that location)
 │
-├── stm.py                    # Short-term memory: token tracking + compaction trigger
-├── stm_loader.py             # Summarization agent loader
-├── context.py                # Context window management, trimming, token counting
+├── agents/                   # Top-level agent variants + remote client
+│   ├── agent.py              #   Agent wrapper for local UI/server streaming
+│   ├── stm_context_agent.py  #   Main agent: STM + context compaction + streaming
+│   ├── no_context_agent.py   #   Lightweight stateless agent (no memory)
+│   └── remote_agent.py       #   HTTP client mirroring the agent.py interface
 │
-├── file.py                   # File model (Pydantic)
-├── file_dictionary.py        # In-session file reference registry
+├── tools/                    # LangChain tool wrappers (agent-facing layer)
+│   ├── hierarchical_agent_tools.py # Creates domain sub-agents, exposes them as tools
+│   ├── traversal_tools.py    #   BFS / DFS LangChain tool wrappers
+│   ├── directory_tools.py    #   Directory operation tool wrappers
+│   ├── txt_tools.py          #   .txt file tool wrappers
+│   ├── csv_tools.py          #   .csv file tool wrappers
+│   └── rollback_tools.py     #   LangChain tool wrappers for rollback operations
 │
-├── hierarchical_agent_tools.py # Creates domain sub-agents, exposes them as tools
-├── traversal_tools.py        # BFS / DFS LangChain tool wrappers
-├── traversal_functions.py    # BFS / DFS traversal logic
-├── directory_tools.py        # Directory operation tool wrappers
-├── directory_functions.py    # Directory operation logic
-├── txt_tools.py              # .txt file tool wrappers
-├── txt_functions.py          # .txt file I/O logic
-├── csv_tools.py              # .csv file tool wrappers
-├── csv_functions.py          # .csv file I/O logic
-├── rollback.py               # Git-backed rollback: async commits, revert, reset, diff queries
-├── rollback_tools.py         # LangChain tool wrappers for rollback operations
+├── functions/                # Pure file-system logic (no agent/LangChain concerns)
+│   ├── traversal_functions.py #  BFS / DFS traversal logic
+│   ├── directory_functions.py #  Directory operation logic
+│   ├── txt_functions.py      #   .txt file I/O logic
+│   └── csv_functions.py      #   .csv file I/O logic
 │
-├── compare.py                # Exact and fuzzy string matching
-├── setup_directory.py        # Sandboxed path construction (data_dir param throughout)
-├── string_functions.py       # Path display utilities
-├── chat_meta.py              # Session metadata model
-├── arguments.py              # CLI argument parsing
-├── logger.py                 # Logging utilities
+├── core/                     # Shared infrastructure used across every layer above
+│   ├── stm.py                #   Short-term memory: token tracking + compaction trigger
+│   ├── stm_loader.py         #   Summarization agent loader
+│   ├── context.py            #   Context window management, trimming, token counting
+│   ├── file.py               #   File model (Pydantic)
+│   ├── file_dictionary.py    #   In-session file reference registry
+│   ├── rollback.py           #   Git-backed rollback: async commits, revert, reset, diff queries
+│   ├── compare.py            #   Exact and fuzzy string matching
+│   ├── setup_directory.py    #   Sandboxed path construction (data_dir param throughout)
+│   ├── string_functions.py   #   Path display utilities
+│   ├── chat_meta.py          #   Session metadata model
+│   ├── arguments.py          #   CLI argument parsing
+│   ├── configs.py            #   Loads JSON config into typed constants
+│   └── logger.py             #   Logging utilities
 │
 ├── configs/                  # JSON configuration files (model settings, tool flags)
 ├── prompts/                  # Prompt templates

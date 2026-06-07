@@ -1,6 +1,6 @@
-from configs import DIRECTORY_TOOL_DESCRIPTIONS
+from core.configs import DIRECTORY_TOOL_DESCRIPTIONS
 from langchain_core.tools import StructuredTool
-from directory_functions import get_content, create
+from functions.directory_functions import get_content, create
 
 get_directory_content = StructuredTool.from_function(
     func=get_content,

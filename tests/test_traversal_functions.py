@@ -11,11 +11,11 @@ DATA_DIR = os.environ["DATA_DIR"]
 
 # Reload setup_directory and traversal_functions so they pick up the TEST DATA_DIR
 import importlib
-import setup_directory
+from core import setup_directory
 importlib.reload(setup_directory)
-import traversal_functions
+from functions import traversal_functions
 importlib.reload(traversal_functions)
-from traversal_functions import breadth_first_search, depth_first_search
+from functions.traversal_functions import breadth_first_search, depth_first_search
 
 
 class TestTraversalFunctions(unittest.TestCase):

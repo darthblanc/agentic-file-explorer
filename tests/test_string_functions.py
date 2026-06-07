@@ -1,5 +1,5 @@
 import unittest
-from string_functions import strip_base_directory
+from core.string_functions import strip_base_directory
 
 
 class TestStringFunctions(unittest.TestCase):

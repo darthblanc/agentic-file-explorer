@@ -1,5 +1,5 @@
 """
-Thin HTTP client that mirrors the agent.py interface consumed by ui.py and main.py.
+Thin HTTP client that mirrors the agents/agent.py interface consumed by entrypoints/ui.py and entrypoints/main.py.
 
 Set AGENT_SERVER_URL to point at the running server (default: http://localhost:8000).
 """

@@ -1,7 +1,7 @@
 from langchain_core.tools import StructuredTool
 from pydantic import BaseModel, Field
-from configs import SEARCH_ARGS, FUNCTION_DESCRIPTION
-from traversal_functions import breadth_first_search, depth_first_search
+from core.configs import SEARCH_ARGS, FUNCTION_DESCRIPTION
+from functions.traversal_functions import breadth_first_search, depth_first_search
 
 class SearchArgs(BaseModel):
     source_directory: str = Field(..., description=SEARCH_ARGS["source_directory"])

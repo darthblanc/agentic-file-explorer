@@ -1,7 +1,7 @@
 from typing import List
 from pydantic import BaseModel
 from langchain.messages import AnyMessage
-from context import trim_context, count_tokens, inject_system_prompts
+from core.context import trim_context, count_tokens, inject_system_prompts
 
 class MessageContext(BaseModel):
     messages: List[AnyMessage]

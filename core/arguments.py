@@ -1,5 +1,5 @@
 import argparse
-from configs import DESCRIPTION, ARGUMENTS
+from core.configs import DESCRIPTION, ARGUMENTS
 
 parser = argparse.ArgumentParser(description=DESCRIPTION)
 

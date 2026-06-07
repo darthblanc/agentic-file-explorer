@@ -1,7 +1,7 @@
 from langchain_core.tools import StructuredTool
 from pydantic import BaseModel, Field
-from configs import TXT_TOOL_DESCRIPTIONS, TXT_TOOL_READ_ARGS, TXT_TOOL_WRITE_ARGS
-from txt_functions import read, write, append, clear
+from core.configs import TXT_TOOL_DESCRIPTIONS, TXT_TOOL_READ_ARGS, TXT_TOOL_WRITE_ARGS
+from functions.txt_functions import read, write, append, clear
 
 class ReadArgs(BaseModel):
     path: str = Field(..., description=TXT_TOOL_READ_ARGS["path"])
